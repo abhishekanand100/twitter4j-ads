@@ -12,7 +12,7 @@ public interface TwitterAdsConstants {
     Long MAX_IMAGE_SIZE_FOR_WEBSITE_IN_BYTES = 3 * 1040000L; //3 Mebibyte
     long MAX_VIDEO_WEBSITE_CARD_NAME_LENGTH = 80L;
     long MAX_VIDEO_WEBSITE_CARD_TITLE_LENGTH = 70L;
-    int TAILORED_AUDIENCE_UPDATE_BATCH_SIZE = 2500;
+    int CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE = 2500;
 
     int VERSION = 8;
 
@@ -121,9 +121,9 @@ public interface TwitterAdsConstants {
     String PARAM_NEGATIVE_EXACT_KEYWORDS = "negative_exact_keywords";
     String PARAM_NEGATIVE_UNORDERED_KEYWORDS = "negative_unordered_keywords";
     String PARAM_NEGATIVE_PHRASE_KEYWORDS = "negative_phrase_keywords";
-    String PARAM_TAILORED_AUDIENCES = "tailored_audiences";
-    String PARAM_TAILORED_AUDIENCES_EXPANDED = "tailored_audiences_expanded";
-    String PARAM_TAILORED_AUDIENCES_EXCLUDED = "tailored_audiences_excluded";
+    String PARAM_CUSTOM_AUDIENCES = "custom_audiences";
+    String PARAM_CUSTOM_AUDIENCES_EXPANDED = "custom_audiences_expanded";
+    String PARAM_CUSTOM_AUDIENCES_EXCLUDED = "custom_audiences_excluded";
     String PARAM_LANGUAGES = "languages";
     String PARAM_AGE_RANGE = "age_buckets";
     String PARAM_BEHAVIOR = "behaviors";
@@ -304,7 +304,7 @@ public interface TwitterAdsConstants {
     String PATH_TARGETING_CRITERIA_EVENT = VERSION + "/targeting_criteria/events";
 
     String PATH_TARGETING_LANGUAGES = VERSION + "/targeting_criteria/languages";
-    String PATH_TAILORED_AUDIENCES = "/tailored_audiences";
+    String PATH_CUSTOM_AUDIENCES = "/custom_audiences";
     String PATH_TARGETING_SUGGESTIONS = "/targeting_suggestions/";
 
     String PATH_TV_SHOWS = VERSION + "/targeting_criteria/tv_shows/";
@@ -334,11 +334,11 @@ public interface TwitterAdsConstants {
     String PATH_PROMOTED_VIDEO_TWEET = "/tweet";
     String PATH_PROMOTED_TWEET_V2 = "/tweet";
     String PATH_ACCOUNTS = "accounts/";
-    String PATH_TAILORED_AUDIENCE = "/tailored_audiences/";
+    String PATH_CUSTOM_AUDIENCE = "/custom_audiences/";
     @Deprecated
-    String PATH_TAILORED_AUDIENCE_CHANGES = "/tailored_audience_changes/";
-    String PATH_TAILORED_AUDIENCE_PERMISSIONS = "/permissions/";
-    String PATH_TAILORED_AUDIENCE_MATCHING_RULES = "/tailored_audience_matching_rules/";
+    String PATH_CUSTOM_AUDIENCE_CHANGES = "/custom_audience_changes/";
+    String PATH_CUSTOM_AUDIENCE_PERMISSIONS = "/permissions/";
+    String PATH_CUSTOM_AUDIENCE_MATCHING_RULES = "/custom_audience_matching_rules/";
 
     String POST_TON_DATA = "https://ton.twitter.com/1.1/ton/bucket/ta_partner";
     String PARAM_DESCRIPTION = "description";

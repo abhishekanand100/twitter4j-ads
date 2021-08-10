@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.annotations.SerializedName;
 import twitter4jads.models.LocationType;
-import twitter4jads.models.ads.audience.TailoredAudienceType;
+import twitter4jads.models.ads.audience.CustomAudienceType;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -56,11 +56,11 @@ public class TargetingCriteria extends TwitterEntity {
     @SerializedName("show_count")
     private Integer showCount;
 
-    @SerializedName("tailored_audience_type")
-    private TailoredAudienceType tailoredAudienceType;
+    @SerializedName("custom_audience_type")
+    private CustomAudienceType customAudienceType;
 
-    @SerializedName("tailored_audience_expansion")
-    private boolean tailoredAudienceExpansion;
+    @SerializedName("custom_audience_expansion")
+    private boolean customAudienceExpansion;
 
     @SerializedName("locale")
     private String tvMarketLocale;
@@ -114,13 +114,13 @@ public class TargetingCriteria extends TwitterEntity {
         return estimatedUsers;
     }
 
-    public TailoredAudienceType getTailoredAudienceType() {
-        return tailoredAudienceType;
+    public CustomAudienceType getCustomAudienceType() {
+        return customAudienceType;
     }
 
     @SuppressWarnings("unused")
-    public void setTailoredAudienceType(TailoredAudienceType tailoredAudienceType) {
-        this.tailoredAudienceType = tailoredAudienceType;
+    public void setCustomAudienceType(CustomAudienceType customAudienceType) {
+        this.customAudienceType = customAudienceType;
     }
 
     @SuppressWarnings("unused")
@@ -211,13 +211,13 @@ public class TargetingCriteria extends TwitterEntity {
         this.updatedAt = updatedAt;
     }
 
-    public boolean isTailoredAudienceExpansion() {
-        return tailoredAudienceExpansion;
+    public boolean isCustomAudienceExpansion() {
+        return customAudienceExpansion;
     }
 
     @SuppressWarnings("unused")
-    public void setTailoredAudienceExpansion(boolean tailoredAudienceExpansion) {
-        this.tailoredAudienceExpansion = tailoredAudienceExpansion;
+    public void setCustomAudienceExpansion(boolean customAudienceExpansion) {
+        this.customAudienceExpansion = customAudienceExpansion;
     }
 
     public LocationType getLocationType() {
@@ -294,8 +294,8 @@ public class TargetingCriteria extends TwitterEntity {
                 ", estimatedUsers=" + estimatedUsers +
                 ", genre='" + genre + '\'' +
                 ", showCount=" + showCount +
-                ", tailoredAudienceType=" + tailoredAudienceType +
-                ", tailoredAudienceExpansion=" + tailoredAudienceExpansion +
+                ", customAudienceType=" + customAudienceType +
+                ", customAudienceExpansion=" + customAudienceExpansion +
                 ", tvMarketLocale='" + tvMarketLocale + '\'' +
                 ", iabCategories=" + Arrays.toString(iabCategories) +
                 ", eventType='" + eventType + '\'' +

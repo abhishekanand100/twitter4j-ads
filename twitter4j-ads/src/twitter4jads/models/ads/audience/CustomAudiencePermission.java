@@ -14,7 +14,7 @@ import java.util.Date;
  * Time: 4:21 PM
  */
 
-public class TailoredAudiencePermission extends TwitterEntity {
+public class CustomAudiencePermission extends TwitterEntity {
     public static final String GRANTED_ACCOUNT_ID = "granted_account_id";
     public static final String PERMISSION_LEVEL = "permission_level";
     public static final String DELETED = "deleted";
@@ -24,7 +24,7 @@ public class TailoredAudiencePermission extends TwitterEntity {
     @SerializedName(GRANTED_ACCOUNT_ID)
     private String grantedAccountId;
     @SerializedName(PERMISSION_LEVEL)
-    private TailoredAudiencePermissionLevel permissionLevel;
+    private CustomAudiencePermissionLevel permissionLevel;
     @SerializedName(DELETED)
     private Boolean deleted;
     @SerializedName(CREATED_AT)
@@ -32,11 +32,11 @@ public class TailoredAudiencePermission extends TwitterEntity {
     @SerializedName(UPDATED_AT)
     private Date timeUpdated;
 
-    public TailoredAudiencePermissionLevel getPermissionLevel() {
+    public CustomAudiencePermissionLevel getPermissionLevel() {
         return permissionLevel;
     }
 
-    public void setPermissionLevel(TailoredAudiencePermissionLevel permissionLevel) {
+    public void setPermissionLevel(CustomAudiencePermissionLevel permissionLevel) {
         this.permissionLevel = permissionLevel;
     }
 

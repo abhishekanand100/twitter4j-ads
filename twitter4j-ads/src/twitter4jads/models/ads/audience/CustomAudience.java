@@ -1,8 +1,8 @@
 package twitter4jads.models.ads;
 
 import com.google.gson.annotations.SerializedName;
-import twitter4jads.models.ads.audience.TailoredAudiencePermissionLevel;
-import twitter4jads.models.ads.audience.TailoredAudienceType;
+import twitter4jads.models.ads.audience.CustomAudiencePermissionLevel;
+import twitter4jads.models.ads.audience.CustomAudienceType;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * Date: 10/10/14
  * Time: 10:51 PM
  */
-public class TailoredAudience extends TwitterEntity {
+public class CustomAudience extends TwitterEntity {
 
     public static final String CREATED_AT = "created_at";
     public static final String UPDATED_AT = "updated_at";
@@ -41,7 +41,7 @@ public class TailoredAudience extends TwitterEntity {
     private TargetingType targetingType;
 
     @SerializedName(AUDIENCE_TYPE)
-    private TailoredAudienceType tailoredAudienceType;
+    private CustomAudienceType customAudienceType;
 
     @SerializedName(AUDIENCE_SIZE)
     private String audienceSize;
@@ -50,7 +50,7 @@ public class TailoredAudience extends TwitterEntity {
     private Boolean isTargetable;
 
     @SerializedName(TARGETABLE_TYPES)
-    private List<TailoredAudienceType> targetableTypes;
+    private List<CustomAudienceType> targetableTypes;
 
     @SerializedName(REASONS_NOT_TARGETABLE)
     private List<String> reasonsNotTargetable;
@@ -62,16 +62,16 @@ public class TailoredAudience extends TwitterEntity {
     private String partnerSource;
 
     @SerializedName(PERMISSION_LEVEL)
-    private TailoredAudiencePermissionLevel permissionLevel;
+    private CustomAudiencePermissionLevel permissionLevel;
 
     @SerializedName(OWNER_ACCOUNT_ID)
     private String ownerAccountId;
 
-    public TailoredAudiencePermissionLevel getPermissionLevel() {
+    public CustomAudiencePermissionLevel getPermissionLevel() {
         return permissionLevel;
     }
 
-    public void setPermissionLevel(TailoredAudiencePermissionLevel permissionLevel) {
+    public void setPermissionLevel(CustomAudiencePermissionLevel permissionLevel) {
         this.permissionLevel = permissionLevel;
     }
 
@@ -107,11 +107,11 @@ public class TailoredAudience extends TwitterEntity {
         isTargetable = targetable;
     }
 
-    public List<TailoredAudienceType> getTargetableTypes() {
+    public List<CustomAudienceType> getTargetableTypes() {
         return targetableTypes;
     }
 
-    public void setTargetableTypes(List<TailoredAudienceType> targetableTypes) {
+    public void setTargetableTypes(List<CustomAudienceType> targetableTypes) {
         this.targetableTypes = targetableTypes;
     }
 
@@ -123,12 +123,12 @@ public class TailoredAudience extends TwitterEntity {
         this.reasonsNotTargetable = reasonsNotTargetable;
     }
 
-    public TailoredAudienceType getTailoredAudienceType() {
-        return tailoredAudienceType;
+    public CustomAudienceType getCustomAudienceType() {
+        return customAudienceType;
     }
 
-    public void setTailoredAudienceType(TailoredAudienceType tailoredAudienceType) {
-        this.tailoredAudienceType = tailoredAudienceType;
+    public void setCustomAudienceType(CustomAudienceType customAudienceType) {
+        this.customAudienceType = customAudienceType;
     }
 
 

@@ -1,10 +1,9 @@
 package twitter4jads.impl;
 
-import java.util.Set;
-
 import com.google.gson.annotations.SerializedName;
+import twitter4jads.models.ads.audience.CustomAudienceUserDetails;
 
-import twitter4jads.models.ads.audience.TailoredAudienceUserDetails;
+import java.util.Set;
 
 /**
  * Twitter V5 Audience API params structure User: mayankbhargava
@@ -15,7 +14,7 @@ import twitter4jads.models.ads.audience.TailoredAudienceUserDetails;
 class NewAdsAudienceApiParams {
 
     @SerializedName("users")
-    private Set<TailoredAudienceUserDetails> tailoredAudienceUserDetails;
+    private Set<CustomAudienceUserDetails> customAudienceUserDetails;
 
     @SerializedName("effective_at")
     private String effectiveAt;     //in ISO 8601
@@ -23,12 +22,12 @@ class NewAdsAudienceApiParams {
     @SerializedName("expire_at")
     private String expireAt;        //in ISO 8601
 
-    public Set<TailoredAudienceUserDetails> getTailoredAudienceUserDetails() {
-        return tailoredAudienceUserDetails;
+    public Set<CustomAudienceUserDetails> getCustomAudienceUserDetails() {
+        return customAudienceUserDetails;
     }
 
-    public void setTailoredAudienceUserDetails(Set<TailoredAudienceUserDetails> tailoredAudienceUserDetails) {
-        this.tailoredAudienceUserDetails = tailoredAudienceUserDetails;
+    public void setCustomAudienceUserDetails(Set<CustomAudienceUserDetails> customAudienceUserDetails) {
+        this.customAudienceUserDetails = customAudienceUserDetails;
     }
 
     public String getEffectiveAt() {

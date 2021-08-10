@@ -12,12 +12,12 @@ import java.util.Set;
  * @date 12/12/18
  * @time 6:35 PM
  */
-public class TailoredAudienceOperation {
+public class CustomAudienceOperation {
 
     private String effectiveFrom;
     private String expireAt;
-    private TailoredAudienceOperationType operationType;
-    private Set<TailoredAudienceUserDetails> users;
+    private CustomAudienceOperationType operationType;
+    private Set<CustomAudienceUserDetails> users;
     private List<String> errors = Lists.newArrayList();
     private List<String> operationErrors = Lists.newArrayList();
 
@@ -37,19 +37,19 @@ public class TailoredAudienceOperation {
         this.expireAt = expireAt;
     }
 
-    public TailoredAudienceOperationType getOperationType() {
+    public CustomAudienceOperationType getOperationType() {
         return operationType;
     }
 
-    public void setOperationType(TailoredAudienceOperationType operationType) {
+    public void setOperationType(CustomAudienceOperationType operationType) {
         this.operationType = operationType;
     }
 
-    public Set<TailoredAudienceUserDetails> getUsers() {
+    public Set<CustomAudienceUserDetails> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<TailoredAudienceUserDetails> users) {
+    public void setUsers(Set<CustomAudienceUserDetails> users) {
         this.users = users;
     }
 

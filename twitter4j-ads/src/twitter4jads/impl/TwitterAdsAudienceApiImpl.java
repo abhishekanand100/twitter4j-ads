@@ -1,37 +1,12 @@
 package twitter4jads.impl;
 
-import static twitter4jads.TwitterAdsConstants.PARAM_CURSOR;
-import static twitter4jads.TwitterAdsConstants.PATH_TAILORED_AUDIENCE;
-import static twitter4jads.TwitterAdsConstants.PATH_TAILORED_AUDIENCES;
-import static twitter4jads.TwitterAdsConstants.PATH_TAILORED_AUDIENCE_MATCHING_RULES;
-import static twitter4jads.TwitterAdsConstants.PATH_TAILORED_AUDIENCE_PERMISSIONS;
-import static twitter4jads.TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5;
-import static twitter4jads.TwitterAdsConstants.PREFIX_BATCH_ACCOUNTS_V5;
-import static twitter4jads.TwitterAdsConstants.SLASH;
-import static twitter4jads.TwitterAdsConstants.TAILORED_AUDIENCE_UPDATE_BATCH_SIZE;
-import static twitter4jads.TwitterAdsConstants.USERS;
-import static twitter4jads.internal.http.HttpResponseCode.BAD_REQUEST;
-import static twitter4jads.internal.http.HttpResponseCode.NOT_FOUND;
-import static twitter4jads.internal.http.HttpResponseCode.TOO_MANY_REQUESTS;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import twitter4jads.BaseAdsListBatchPostResponse;
 import twitter4jads.BaseAdsListResponse;
 import twitter4jads.BaseAdsListResponseIterable;
@@ -43,15 +18,38 @@ import twitter4jads.internal.http.HttpParameter;
 import twitter4jads.internal.http.HttpResponse;
 import twitter4jads.internal.models4j.RateLimitStatus;
 import twitter4jads.internal.models4j.TwitterException;
+import twitter4jads.models.ads.CustomAudience;
 import twitter4jads.models.ads.HttpVerb;
-import twitter4jads.models.ads.TailoredAudience;
 import twitter4jads.models.ads.audience.AudienceApiResponse;
-import twitter4jads.models.ads.audience.TailoredAudienceMatchingRules;
-import twitter4jads.models.ads.audience.TailoredAudienceOperation;
-import twitter4jads.models.ads.audience.TailoredAudiencePermission;
-import twitter4jads.models.ads.audience.TailoredAudiencePermissionLevel;
-import twitter4jads.models.ads.audience.TailoredAudienceUserDetails;
+import twitter4jads.models.ads.audience.CustomAudienceMatchingRules;
+import twitter4jads.models.ads.audience.CustomAudienceOperation;
+import twitter4jads.models.ads.audience.CustomAudiencePermission;
+import twitter4jads.models.ads.audience.CustomAudiencePermissionLevel;
+import twitter4jads.models.ads.audience.CustomAudienceUserDetails;
 import twitter4jads.util.TwitterAdUtil;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static twitter4jads.TwitterAdsConstants.CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE;
+import static twitter4jads.TwitterAdsConstants.PARAM_CURSOR;
+import static twitter4jads.TwitterAdsConstants.PATH_CUSTOM_AUDIENCE;
+import static twitter4jads.TwitterAdsConstants.PATH_CUSTOM_AUDIENCES;
+import static twitter4jads.TwitterAdsConstants.PATH_CUSTOM_AUDIENCE_MATCHING_RULES;
+import static twitter4jads.TwitterAdsConstants.PATH_CUSTOM_AUDIENCE_PERMISSIONS;
+import static twitter4jads.TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5;
+import static twitter4jads.TwitterAdsConstants.PREFIX_BATCH_ACCOUNTS_V5;
+import static twitter4jads.TwitterAdsConstants.SLASH;
+import static twitter4jads.TwitterAdsConstants.USERS;
+import static twitter4jads.internal.http.HttpResponseCode.BAD_REQUEST;
+import static twitter4jads.internal.http.HttpResponseCode.NOT_FOUND;
+import static twitter4jads.internal.http.HttpResponseCode.TOO_MANY_REQUESTS;
 
 /**
  * User: abhay
@@ -70,12 +68,12 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
     }
 
     @Override
-    public BaseAdsListResponseIterable<TailoredAudience> getAllTailoredAudiences(String accountId, Optional<Integer> count,
+    public BaseAdsListResponseIterable<CustomAudience> getAllCustomAudiences(String accountId, Optional<Integer> count,
                                                                                  Optional<Boolean> withDeleted, Optional<String> cursor)
         throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
-                + PATH_TAILORED_AUDIENCES;
+                + PATH_CUSTOM_AUDIENCES;
         final List<HttpParameter> params = new ArrayList<>();
         if (count != null && count.isPresent() && count.get() < 1000) {
             params.add(new HttpParameter("count", count.get()));
@@ -87,7 +85,7 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
             params.add(new HttpParameter(PARAM_CURSOR, cursor.get()));
         }
 
-        final Type type = new TypeToken<BaseAdsListResponse<TailoredAudience>>() {
+        final Type type = new TypeToken<BaseAdsListResponse<CustomAudience>>() {
         }.getType();
 
         return twitterAdsClient.executeHttpListRequest(baseUrl, params, type);
@@ -95,24 +93,24 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
 
     @SuppressWarnings("Duplicates")
     @Override
-    public BaseAdsResponse<TailoredAudience> getTailoredAudienceForId(String accountId, String tailoredAudienceId) throws TwitterException {
+    public BaseAdsResponse<CustomAudience> getCustomAudienceForId(String accountId, String customAudienceId) throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
-        TwitterAdUtil.ensureNotNull(tailoredAudienceId, "tailoredAudienceId");
+        TwitterAdUtil.ensureNotNull(customAudienceId, "customAudienceId");
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
-                + PATH_TAILORED_AUDIENCE + tailoredAudienceId;
-        final Type type = new TypeToken<BaseAdsResponse<TailoredAudience>>() {
+                + PATH_CUSTOM_AUDIENCE + customAudienceId;
+        final Type type = new TypeToken<BaseAdsResponse<CustomAudience>>() {
         }.getType();
 
         return twitterAdsClient.executeHttpRequest(baseUrl, null, type, HttpVerb.GET);
     }
 
     @Override
-    public BaseAdsResponse<TailoredAudience> deleteTailoredAudience(String accountId, String tailoredAudienceId) throws TwitterException {
+    public BaseAdsResponse<CustomAudience> deleteCustomAudience(String accountId, String customAudienceId) throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
-        TwitterAdUtil.ensureNotNull(tailoredAudienceId, "tailoredAudienceId");
+        TwitterAdUtil.ensureNotNull(customAudienceId, "customAudienceId");
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
-                + PATH_TAILORED_AUDIENCE + tailoredAudienceId;
-        final Type type = new TypeToken<BaseAdsResponse<TailoredAudience>>() {
+                + PATH_CUSTOM_AUDIENCE + customAudienceId;
+        final Type type = new TypeToken<BaseAdsResponse<CustomAudience>>() {
         }.getType();
 
         return twitterAdsClient.executeHttpRequest(baseUrl, null, type, HttpVerb.DELETE);
@@ -120,71 +118,71 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
 
     @SuppressWarnings("Duplicates")
     @Override
-    public BaseAdsResponse<TailoredAudience> createTailoredAudience(String accountId, String name) throws TwitterException {
+    public BaseAdsResponse<CustomAudience> createCustomAudience(String accountId, String name) throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         TwitterAdUtil.ensureNotNull(name, "name");
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
-                + PATH_TAILORED_AUDIENCE;
+                + PATH_CUSTOM_AUDIENCE;
         final List<HttpParameter> params = new ArrayList<>();
         params.add(new HttpParameter("name", name));
 
-        final Type type = new TypeToken<BaseAdsResponse<TailoredAudience>>() {
+        final Type type = new TypeToken<BaseAdsResponse<CustomAudience>>() {
         }.getType();
         return twitterAdsClient.executeHttpRequest(baseUrl, params.toArray(new HttpParameter[params.size()]), type, HttpVerb.POST);
     }
 
-    public BaseAdsResponse<TailoredAudienceMatchingRules> addMatchingRulesToAudience(TailoredAudienceMatchingRules tailoredAudienceMatchingRules,
+    public BaseAdsResponse<CustomAudienceMatchingRules> addMatchingRulesToAudience(CustomAudienceMatchingRules customAudienceMatchingRules,
                                                                                      String accountId) throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
-        TwitterAdUtil.ensureNotNull(tailoredAudienceMatchingRules, "Matching Rules");
+        TwitterAdUtil.ensureNotNull(customAudienceMatchingRules, "Matching Rules");
 
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
-                + PATH_TAILORED_AUDIENCE_MATCHING_RULES;
+                + PATH_CUSTOM_AUDIENCE_MATCHING_RULES;
         final List<HttpParameter> params = new ArrayList<>();
-        params.add(new HttpParameter("tailored_audience_id", tailoredAudienceMatchingRules.getTailoredAudienceId()));
-        params.add(new HttpParameter("website_tag_id", tailoredAudienceMatchingRules.getWebsiteTagId()));
-        params.add(new HttpParameter("rule_type", tailoredAudienceMatchingRules.getRuleType().name()));
-        if (StringUtils.isNotBlank(tailoredAudienceMatchingRules.getRuleValue())) {
-            params.add(new HttpParameter("rule_value", tailoredAudienceMatchingRules.getRuleValue()));
+        params.add(new HttpParameter("custom_audience_id", customAudienceMatchingRules.getCustomAudienceId()));
+        params.add(new HttpParameter("website_tag_id", customAudienceMatchingRules.getWebsiteTagId()));
+        params.add(new HttpParameter("rule_type", customAudienceMatchingRules.getRuleType().name()));
+        if (StringUtils.isNotBlank(customAudienceMatchingRules.getRuleValue())) {
+            params.add(new HttpParameter("rule_value", customAudienceMatchingRules.getRuleValue()));
         }
 
-        final Type type = new TypeToken<BaseAdsResponse<TailoredAudienceMatchingRules>>() {
+        final Type type = new TypeToken<BaseAdsResponse<CustomAudienceMatchingRules>>() {
         }.getType();
         return twitterAdsClient.executeHttpRequest(baseUrl, params.toArray(new HttpParameter[params.size()]), type, HttpVerb.POST);
     }
 
 
     @Override
-    public BaseAdsListBatchPostResponse<TailoredAudience> createFlexibleTailoredAudience(String accountId, String requestBody) throws TwitterException {
+    public BaseAdsListBatchPostResponse<CustomAudience> createFlexibleCustomAudience(String accountId, String requestBody) throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         TwitterAdUtil.ensureNotNull(requestBody, "params");
         String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_BATCH_ACCOUNTS_V5 + accountId
-                + PATH_TAILORED_AUDIENCE;
+                + PATH_CUSTOM_AUDIENCE;
 
-        Type type = new TypeToken<BaseAdsListBatchPostResponse<TailoredAudience>>() {
+        Type type = new TypeToken<BaseAdsListBatchPostResponse<CustomAudience>>() {
         }.getType();
         final HttpResponse httpResponse = twitterAdsClient.postBatchRequest(baseUrl, requestBody);
         return GSON.fromJson(httpResponse.asString(), type);
     }
 
     @Override
-    public List<TailoredAudienceOperation> updateTailoredAudienceById(String accountId, String tailoredAudienceId,
-                                                                      List<TailoredAudienceOperation> operations)
+    public List<CustomAudienceOperation> updateCustomAudienceById(String accountId, String customAudienceId,
+                                                                      List<CustomAudienceOperation> operations)
             throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
-        TwitterAdUtil.ensureNotNull(tailoredAudienceId, "tailoredAudienceId");
+        TwitterAdUtil.ensureNotNull(customAudienceId, "customAudienceId");
         TwitterAdUtil.ensureNotEmpty(operations, "operations");
 
         final String baseUrl =
-                twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId + PATH_TAILORED_AUDIENCE
-                        + tailoredAudienceId + SLASH + USERS;
+                twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId + PATH_CUSTOM_AUDIENCE
+                        + customAudienceId + SLASH + USERS;
         final Gson gson = new Gson();
-        final List<TailoredAudienceOperation> result = Lists.newArrayList();
+        final List<CustomAudienceOperation> result = Lists.newArrayList();
 
-        final Iterator<List<TailoredAudienceOperation>> batchIterator = generateBatchSequence(operations);
+        final Iterator<List<CustomAudienceOperation>> batchIterator = generateBatchSequence(operations);
 
         while (batchIterator.hasNext()) {
-            final List<TailoredAudienceOperation> batch = batchIterator.next();
+            final List<CustomAudienceOperation> batch = batchIterator.next();
             final List<NewAdsAudienceApiOperation> apiOperation =
                     batch.stream().map(this::generateRequestOperation).collect(Collectors.toList());
             final String requestBody = gson.toJson(apiOperation);
@@ -199,76 +197,76 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
     }
 
     @Override
-    public BaseAdsListResponse<TailoredAudiencePermission> getTailoredAudiencePermission(String accountId, String tailoredAudienceId) throws
+    public BaseAdsListResponse<CustomAudiencePermission> getCustomAudiencePermission(String accountId, String customAudienceId) throws
             TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
-        TwitterAdUtil.ensureNotNull(tailoredAudienceId, "tailoredAudienceId");
+        TwitterAdUtil.ensureNotNull(customAudienceId, "customAudienceId");
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
-                + PATH_TAILORED_AUDIENCE + tailoredAudienceId
-                + PATH_TAILORED_AUDIENCE_PERMISSIONS;
+                + PATH_CUSTOM_AUDIENCE + customAudienceId
+                + PATH_CUSTOM_AUDIENCE_PERMISSIONS;
 
-        final Type type = new TypeToken<BaseAdsListResponse<TailoredAudiencePermission>>() {
+        final Type type = new TypeToken<BaseAdsListResponse<CustomAudiencePermission>>() {
         }.getType();
         return twitterAdsClient.executeRequest(baseUrl, null, type, HttpVerb.GET);
     }
 
     @Override
-    public BaseAdsResponse<TailoredAudiencePermission> shareTailoredAudience(String accountId, String tailoredAudienceId, String
+    public BaseAdsResponse<CustomAudiencePermission> shareCustomAudience(String accountId, String customAudienceId, String
             grantedAccountId) throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
-        TwitterAdUtil.ensureNotNull(tailoredAudienceId, "tailoredAudienceId");
+        TwitterAdUtil.ensureNotNull(customAudienceId, "customAudienceId");
         TwitterAdUtil.ensureNotNull(grantedAccountId, "grantedAccountId");
 
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
-                + PATH_TAILORED_AUDIENCE + tailoredAudienceId
-                + PATH_TAILORED_AUDIENCE_PERMISSIONS;
+                + PATH_CUSTOM_AUDIENCE + customAudienceId
+                + PATH_CUSTOM_AUDIENCE_PERMISSIONS;
         final List<HttpParameter> params = new ArrayList<>();
         params.add(new HttpParameter("granted_account_id", grantedAccountId));
-        params.add(new HttpParameter("permission_level", TailoredAudiencePermissionLevel.READ_WRITE.name()));
+        params.add(new HttpParameter("permission_level", CustomAudiencePermissionLevel.READ_WRITE.name()));
 
-        final Type type = new TypeToken<BaseAdsResponse<TailoredAudiencePermission>>() {
+        final Type type = new TypeToken<BaseAdsResponse<CustomAudiencePermission>>() {
         }.getType();
         return twitterAdsClient.executeHttpRequest(baseUrl, params.toArray(new HttpParameter[params.size()]), type, HttpVerb.POST);
     }
 
     // ----------------------------------------------------------------------- PRIVATE METHODS -----------------------------------------------------
 
-    private Iterator<List<TailoredAudienceOperation>> generateBatchSequence(List<TailoredAudienceOperation> operations) {
-        PriorityQueue<TailoredAudienceOperation> operationPriorityQueue =
-                new PriorityQueue<>(Comparator.<TailoredAudienceOperation>comparingInt(operation -> operation.getUsers().size()).reversed());
+    private Iterator<List<CustomAudienceOperation>> generateBatchSequence(List<CustomAudienceOperation> operations) {
+        PriorityQueue<CustomAudienceOperation> operationPriorityQueue =
+                new PriorityQueue<>(Comparator.<CustomAudienceOperation>comparingInt(operation -> operation.getUsers().size()).reversed());
 
-        for (TailoredAudienceOperation operation : operations) {
+        for (CustomAudienceOperation operation : operations) {
             operationPriorityQueue.offer(operation);
         }
 
-        return new Iterator<List<TailoredAudienceOperation>>() {
+        return new Iterator<List<CustomAudienceOperation>>() {
             @Override
             public boolean hasNext() {
                 return !operationPriorityQueue.isEmpty();
             }
 
             @Override
-            public List<TailoredAudienceOperation> next() {
-                List<TailoredAudienceOperation> toReturn = Lists.newArrayList();
+            public List<CustomAudienceOperation> next() {
+                List<CustomAudienceOperation> toReturn = Lists.newArrayList();
                 int totalSize = 0;
-                while (totalSize < TAILORED_AUDIENCE_UPDATE_BATCH_SIZE && !operationPriorityQueue.isEmpty()) {
+                while (totalSize < CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE && !operationPriorityQueue.isEmpty()) {
                     int peekSize = operationPriorityQueue.peek().getUsers().size();
-                    if (totalSize + peekSize < TAILORED_AUDIENCE_UPDATE_BATCH_SIZE) {
+                    if (totalSize + peekSize < CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE) {
                         totalSize += peekSize;
                         toReturn.add(operationPriorityQueue.poll());
                     } else {
-                        int diff = TAILORED_AUDIENCE_UPDATE_BATCH_SIZE - totalSize;
-                        totalSize = TAILORED_AUDIENCE_UPDATE_BATCH_SIZE;
+                        int diff = CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE - totalSize;
+                        totalSize = CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE;
 
-                        TailoredAudienceOperation topOperation = operationPriorityQueue.poll();
-                        TailoredAudienceOperation fractionalTopOperation = new TailoredAudienceOperation();
+                        CustomAudienceOperation topOperation = operationPriorityQueue.poll();
+                        CustomAudienceOperation fractionalTopOperation = new CustomAudienceOperation();
 
                         fractionalTopOperation.setOperationType(topOperation.getOperationType());
                         fractionalTopOperation.setEffectiveFrom(topOperation.getEffectiveFrom());
                         fractionalTopOperation.setExpireAt(topOperation.getExpireAt());
 
-                        Set<TailoredAudienceUserDetails> fractionalTopOperationUsers = Sets.newHashSet();
-                        Iterator<TailoredAudienceUserDetails> topOperationUsersIterator = topOperation.getUsers().iterator();
+                        Set<CustomAudienceUserDetails> fractionalTopOperationUsers = Sets.newHashSet();
+                        Iterator<CustomAudienceUserDetails> topOperationUsersIterator = topOperation.getUsers().iterator();
                         while (diff > 0 && topOperationUsersIterator.hasNext()) {
                             fractionalTopOperationUsers.add(topOperationUsersIterator.next());
                             diff--;
@@ -286,14 +284,14 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
         };
     }
 
-    private NewAdsAudienceApiOperation generateRequestOperation(TailoredAudienceOperation operation) {
+    private NewAdsAudienceApiOperation generateRequestOperation(CustomAudienceOperation operation) {
         NewAdsAudienceApiOperation apiOperation = new NewAdsAudienceApiOperation();
         apiOperation.setOperationType(operation.getOperationType().name());
 
         NewAdsAudienceApiParams apiParams = new NewAdsAudienceApiParams();
         apiParams.setExpireAt(operation.getExpireAt());
         apiParams.setEffectiveAt(operation.getEffectiveFrom());
-        apiParams.setTailoredAudienceUserDetails(operation.getUsers());
+        apiParams.setCustomAudienceUserDetails(operation.getUsers());
 
         apiOperation.setParams(apiParams);
         return apiOperation;
@@ -338,8 +336,8 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
         return false;
     }
 
-    private boolean handleAudienceUpdateResponse(List<TailoredAudienceOperation> batch, AudienceApiResponse apiResponse,
-                                                 List<TailoredAudienceOperation> result) {
+    private boolean handleAudienceUpdateResponse(List<CustomAudienceOperation> batch, AudienceApiResponse apiResponse,
+                                                 List<CustomAudienceOperation> result) {
         boolean errorFlag = false;
         if (apiResponse.getData() != null) {
             AudienceApiResponse.NewAudienceApiResponseData response = apiResponse.getData();
@@ -356,25 +354,25 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
         return errorFlag;
     }
 
-    private Long countUsersInBatch(List<TailoredAudienceOperation> batch) {
+    private Long countUsersInBatch(List<CustomAudienceOperation> batch) {
         long totalSize = 0;
         if (batch == null) {
             return totalSize;
         }
-        for (TailoredAudienceOperation operation : batch) {
+        for (CustomAudienceOperation operation : batch) {
             totalSize += operation.getUsers().size();
         }
         return totalSize;
     }
 
-    private void fillErrorsInOperation(List<TailoredAudienceOperation> batch, AudienceApiResponse apiResponse) {
+    private void fillErrorsInOperation(List<CustomAudienceOperation> batch, AudienceApiResponse apiResponse) {
         if (CollectionUtils.isEmpty(batch) ||
                 (CollectionUtils.isEmpty(apiResponse.getErrors()) && CollectionUtils.isEmpty(apiResponse.getOperationErrors()))) {
             return;
         }
         final int batchSize = batch.size();
         for (int index = 0; index < batchSize; ++index) {
-            final TailoredAudienceOperation operation = batch.get(index);
+            final CustomAudienceOperation operation = batch.get(index);
 
             // batch level errors
             if (CollectionUtils.isNotEmpty(apiResponse.getErrors())) {

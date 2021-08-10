@@ -49,15 +49,15 @@ public class TargetingParam {
     @SerializedName("targeting_criterion_id")
     private String targetingCriterionId;
 
-    @SerializedName("tailored_audience_expansion")
-    private boolean tailoredAudienceExpansion;
+    @SerializedName("custom_audience_expansion")
+    private boolean customAudienceExpansion;
 
-    public boolean isTailoredAudienceExpansion() {
-        return tailoredAudienceExpansion;
+    public boolean isCustomAudienceExpansion() {
+        return customAudienceExpansion;
     }
 
-    public void setTailoredAudienceExpansion(boolean tailoredAudienceExpansion) {
-        this.tailoredAudienceExpansion = tailoredAudienceExpansion;
+    public void setCustomAudienceExpansion(boolean customAudienceExpansion) {
+        this.customAudienceExpansion = customAudienceExpansion;
     }
 
     public String getTargetingCriterionId() {

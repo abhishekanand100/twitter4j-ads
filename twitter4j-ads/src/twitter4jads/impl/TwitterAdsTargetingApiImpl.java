@@ -55,6 +55,9 @@ import static twitter4jads.TwitterAdsConstants.PARAM_CONVERSATIONS;
 import static twitter4jads.TwitterAdsConstants.PARAM_COUNT;
 import static twitter4jads.TwitterAdsConstants.PARAM_COUNTRY_CODE;
 import static twitter4jads.TwitterAdsConstants.PARAM_CURSOR;
+import static twitter4jads.TwitterAdsConstants.PARAM_CUSTOM_AUDIENCES;
+import static twitter4jads.TwitterAdsConstants.PARAM_CUSTOM_AUDIENCES_EXCLUDED;
+import static twitter4jads.TwitterAdsConstants.PARAM_CUSTOM_AUDIENCES_EXPANDED;
 import static twitter4jads.TwitterAdsConstants.PARAM_DEVICES;
 import static twitter4jads.TwitterAdsConstants.PARAM_ENGAGEMENT_TYPE;
 import static twitter4jads.TwitterAdsConstants.PARAM_EVENT;
@@ -84,9 +87,6 @@ import static twitter4jads.TwitterAdsConstants.PARAM_PLATFORM_VERSIONS;
 import static twitter4jads.TwitterAdsConstants.PARAM_Q;
 import static twitter4jads.TwitterAdsConstants.PARAM_SIMILAR_TO_FOLLOWERS_OF_USERS;
 import static twitter4jads.TwitterAdsConstants.PARAM_SUGGESTION_TYPE;
-import static twitter4jads.TwitterAdsConstants.PARAM_TAILORED_AUDIENCES;
-import static twitter4jads.TwitterAdsConstants.PARAM_TAILORED_AUDIENCES_EXCLUDED;
-import static twitter4jads.TwitterAdsConstants.PARAM_TAILORED_AUDIENCES_EXPANDED;
 import static twitter4jads.TwitterAdsConstants.PARAM_TARGETING_TYPE;
 import static twitter4jads.TwitterAdsConstants.PARAM_TARGETING_VALUE;
 import static twitter4jads.TwitterAdsConstants.PARAM_TARGETING_VALUES;
@@ -659,14 +659,14 @@ public class TwitterAdsTargetingApiImpl implements TwitterAdsTargetingApi {
                     TwitterAdUtil.ensureMaxSize(entry.getValue(), 1000);
                     params.add(new HttpParameter(PARAM_NEGATIVE_EXACT_KEYWORDS, TwitterAdUtil.getCsv(entry.getValue())));
                     break;
-                case TAILORED_AUDIENCE:
-                    params.add(new HttpParameter(PARAM_TAILORED_AUDIENCES, TwitterAdUtil.getCsv(entry.getValue())));
+                case CUSTOM_AUDIENCE:
+                    params.add(new HttpParameter(PARAM_CUSTOM_AUDIENCES, TwitterAdUtil.getCsv(entry.getValue())));
                     break;
-                case TAILORED_AUDIENCES_EXCLUDED:
-                    params.add(new HttpParameter(PARAM_TAILORED_AUDIENCES_EXCLUDED, TwitterAdUtil.getCsv(entry.getValue())));
+                case CUSTOM_AUDIENCES_EXCLUDED:
+                    params.add(new HttpParameter(PARAM_CUSTOM_AUDIENCES_EXCLUDED, TwitterAdUtil.getCsv(entry.getValue())));
                     break;
-                case TAILORED_AUDIENCES_EXPANDED:
-                    params.add(new HttpParameter(PARAM_TAILORED_AUDIENCES_EXPANDED, TwitterAdUtil.getCsv(entry.getValue())));
+                case CUSTOM_AUDIENCES_EXPANDED:
+                    params.add(new HttpParameter(PARAM_CUSTOM_AUDIENCES_EXPANDED, TwitterAdUtil.getCsv(entry.getValue())));
                     break;
                 case LANGUAGE:
                     params.add(new HttpParameter(PARAM_LANGUAGES, TwitterAdUtil.getCsv(entry.getValue())));

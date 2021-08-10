@@ -52,7 +52,7 @@ public class TwitterAdsImpl implements TwitterAds {
     private final TwitterAdsFundingInstrumentApi fundingInstrumentApi;
     private final TwitterAdsMediaApi promotedApi;
     private final TwitterAdsPromotedTweetApi promotedTweetApi;
-    private final TwitterAdsAudienceApi tailoredAudienceApi;
+    private final TwitterAdsAudienceApi customAudienceApi;
     private final TwitterAdsStatApi statApi;
     private final TwitterAdsMediaUploadApi mediaUploadApi;
     private final TwitterAdsWebEventApi webEventApi;
@@ -72,7 +72,7 @@ public class TwitterAdsImpl implements TwitterAds {
         this.cardsApi = new TwitterAdsCardsApiImpl(twitterAdsClient);
         this.fundingInstrumentApi = new TwitterAdsFundingInstrumentApiImpl(twitterAdsClient);
         this.promotedApi = new TwitterAdsMediaApiImpl(twitterAdsClient);
-        this.tailoredAudienceApi = new TwitterAdsAudienceApiImpl(twitterAdsClient);
+        this.customAudienceApi = new TwitterAdsAudienceApiImpl(twitterAdsClient);
         this.statApi = new TwitterAdsStatApiImpl(twitterAdsClient);
         this.mediaUploadApi = new TwitterAdsMediaUploadApiImpl(twitterAdsClient);
         this.webEventApi = new TwitterAdsWebEventApiImpl(twitterAdsClient);
@@ -131,8 +131,8 @@ public class TwitterAdsImpl implements TwitterAds {
     }
 
     @Override
-    public TwitterAdsAudienceApi getTailoredAudienceApi() {
-        return tailoredAudienceApi;
+    public TwitterAdsAudienceApi getCustomAudienceApi() {
+        return customAudienceApi;
     }
 
     @Override

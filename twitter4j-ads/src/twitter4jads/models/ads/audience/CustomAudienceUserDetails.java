@@ -1,18 +1,18 @@
 package twitter4jads.models.ads.audience;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Objects;
 import java.util.Set;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Twitter V5 Audience API user info Denotes information for individual user Add only hashed information It is advisable
- * to use TailoredAudienceUserDetailsBuilder User: mayankbhargava
+ * to use CustomAudienceUserDetailsBuilder User: mayankbhargava
  *
  * @date 25/11/18
  * @time 10:28 PM
  */
-public class TailoredAudienceUserDetails {
+public class CustomAudienceUserDetails {
 
     @SerializedName("email")
     private Set<String> emails;
@@ -81,7 +81,7 @@ public class TailoredAudienceUserDetails {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TailoredAudienceUserDetails that = (TailoredAudienceUserDetails) o;
+        CustomAudienceUserDetails that = (CustomAudienceUserDetails) o;
         return Objects.equals(emails, that.emails) &&
                 Objects.equals(phoneNumbers, that.phoneNumbers) &&
                 Objects.equals(deviceIds, that.deviceIds) &&

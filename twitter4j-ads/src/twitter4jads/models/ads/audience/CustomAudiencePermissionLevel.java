@@ -7,6 +7,6 @@ package twitter4jads.models.ads.audience;
  * Date: 12/01/17
  * Time: 4:20 PM
  */
-public enum TailoredAudiencePermissionLevel {
+public enum CustomAudiencePermissionLevel {
     READ_ONLY,READ_WRITE
 }

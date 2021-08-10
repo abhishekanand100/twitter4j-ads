@@ -10,23 +10,23 @@ import twitter4jads.models.ads.TwitterEntity;
  * Date: 03/04/17
  * Time: 11:51 AM
  */
-public class TailoredAudienceMatchingRules extends TwitterEntity {
+public class CustomAudienceMatchingRules extends TwitterEntity {
 
-    public static final String TAILORED_AUDIENCE_ID = "tailored_audience_id";
+    public static final String CUSTOM_AUDIENCE_ID = "custom_audience_id";
     public static final String WEBSITE_TAG_ID = "website_tag_id";
     public static final String RULE_TYPE = "rule_type";
     private static final String RULE_VALUE = "rule_value";
     private static final String DELETED = "deleted";
 
 
-    @SerializedName(TAILORED_AUDIENCE_ID)
-    private String tailoredAudienceId;
+    @SerializedName(CUSTOM_AUDIENCE_ID)
+    private String customAudienceId;
 
     @SerializedName(WEBSITE_TAG_ID)
     private String websiteTagId;
 
     @SerializedName(RULE_TYPE)
-    private TailoredAudienceMatchingRuleType ruleType;
+    private CustomAudienceMatchingRuleType ruleType;
 
     @SerializedName(RULE_VALUE)
     private String ruleValue;
@@ -34,12 +34,12 @@ public class TailoredAudienceMatchingRules extends TwitterEntity {
     @SerializedName(DELETED)
     private Boolean deleted;
 
-    public String getTailoredAudienceId() {
-        return tailoredAudienceId;
+    public String getCustomAudienceId() {
+        return customAudienceId;
     }
 
-    public void setTailoredAudienceId(String tailoredAudienceId) {
-        this.tailoredAudienceId = tailoredAudienceId;
+    public void setCustomAudienceId(String customAudienceId) {
+        this.customAudienceId = customAudienceId;
     }
 
     public String getWebsiteTagId() {
@@ -50,11 +50,11 @@ public class TailoredAudienceMatchingRules extends TwitterEntity {
         this.websiteTagId = websiteTagId;
     }
 
-    public TailoredAudienceMatchingRuleType getRuleType() {
+    public CustomAudienceMatchingRuleType getRuleType() {
         return ruleType;
     }
 
-    public void setRuleType(TailoredAudienceMatchingRuleType ruleType) {
+    public void setRuleType(CustomAudienceMatchingRuleType ruleType) {
         this.ruleType = ruleType;
     }
 
@@ -74,7 +74,7 @@ public class TailoredAudienceMatchingRules extends TwitterEntity {
         this.deleted = deleted;
     }
 
-    public enum TailoredAudienceMatchingRuleType {
+    public enum CustomAudienceMatchingRuleType {
         CONTAINS,
         EXACT,
         MATCH_ALL

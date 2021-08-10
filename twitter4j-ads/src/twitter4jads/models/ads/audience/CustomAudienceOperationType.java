@@ -7,7 +7,7 @@ package twitter4jads.models.ads.audience;
  * @time 9:34 PM
  */
 
-public enum TailoredAudienceOperationType {
+public enum CustomAudienceOperationType {
     Update, Delete;
 }
 
