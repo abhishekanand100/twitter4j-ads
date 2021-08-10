@@ -4,7 +4,13 @@ import com.google.common.base.Optional;
 import twitter4jads.BaseAdsListResponseIterable;
 import twitter4jads.BaseAdsResponse;
 import twitter4jads.internal.models4j.TwitterException;
-import twitter4jads.models.ads.*;
+import twitter4jads.models.ads.BidStrategy;
+import twitter4jads.models.ads.EntityStatus;
+import twitter4jads.models.ads.LineItem;
+import twitter4jads.models.ads.LineItemAppResponse;
+import twitter4jads.models.ads.PromotedAccount;
+import twitter4jads.models.ads.Sentiments;
+import twitter4jads.models.ads.TwitterOSType;
 import twitter4jads.models.ads.sort.LineItemsSortByField;
 import twitter4jads.models.ads.sort.PromotedAccountsSortByField;
 import twitter4jads.models.media.TwitterMediaCallToAction;
@@ -73,7 +79,7 @@ public interface TwitterAdsLineItemApi {
      * @throws TwitterException
      * @see <a href="https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/line_items/%3Aline_item_id">https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/line_items/%3Aline_item_id</a>
      */
-    BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidType bidType, boolean automaticallySelectBid,
+    BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidStrategy bidType, boolean automaticallySelectBid,
                                              Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
                                              Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy,
                                              Optional<String> bidUnit, Optional<String> advertiserDomain, String optimization,

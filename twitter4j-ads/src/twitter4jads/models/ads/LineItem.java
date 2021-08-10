@@ -40,6 +40,9 @@ public class LineItem extends TwitterEntity {
     @SerializedName("objective")
     private String objective;
 
+    @SerializedName("goal")
+    private String goal;
+
     @SerializedName("deleted")
     private Boolean deleted;
 
@@ -70,14 +73,11 @@ public class LineItem extends TwitterEntity {
     @SerializedName("automatically_select_bid")
     private boolean automaticallySelectBid;
 
-    @SerializedName("bid_type")
-    private BidType bidType;
+    @SerializedName("bid_strategy")
+    private BidStrategy bidStrategy;
 
-    @SerializedName("charge_by")
-    private String chargeBy;
-
-    @SerializedName("bid_unit")
-    private String bidUnit;
+    @SerializedName("pay_by")
+    private String payBy;
 
     @SerializedName("advertiser_domain")
     private String advertiserDomain;
@@ -87,9 +87,6 @@ public class LineItem extends TwitterEntity {
 
     @SerializedName("categories")
     private String[] categories;
-
-    @SerializedName("optimization")
-    private String optimization;
 
     @SerializedName("creative_source")
     private String creativeSource;
@@ -117,14 +114,13 @@ public class LineItem extends TwitterEntity {
         this.creativeSource = creativeSource;
     }
 
-    public String getOptimization() {
-        return optimization;
+    public String getGoal() {
+        return goal;
     }
 
-    public void setOptimization(String optimization) {
-        this.optimization = optimization;
+    public void setGoal(String goal) {
+        this.goal = goal;
     }
-
 
     public String getAccountId() {
         return accountId;
@@ -254,28 +250,20 @@ public class LineItem extends TwitterEntity {
         this.automaticallySelectBid = automaticallySelectBid;
     }
 
-    public BidType getBidType() {
-        return bidType;
+    public BidStrategy getBidStrategy() {
+        return bidStrategy;
     }
 
-    public void setBidType(BidType bidType) {
-        this.bidType = bidType;
+    public void setBidStrategy(BidStrategy bidStrategy) {
+        this.bidStrategy = bidStrategy;
     }
 
-    public String getChargeBy() {
-        return chargeBy;
+    public String getPayBy() {
+        return payBy;
     }
 
-    public void setChargeBy(String chargeBy) {
-        this.chargeBy = chargeBy;
-    }
-
-    public String getBidUnit() {
-        return bidUnit;
-    }
-
-    public void setBidUnit(String bidUnit) {
-        this.bidUnit = bidUnit;
+    public void setPayBy(String payBy) {
+        this.payBy = payBy;
     }
 
     public String getWebEventTag() {
@@ -389,15 +377,14 @@ public class LineItem extends TwitterEntity {
                ", targetCpaLocalMicro=" + targetCpaLocalMicro +
                ", updatedAt=" + updatedAt +
                ", automaticallySelectBid=" + automaticallySelectBid +
-               ", bidType=" + bidType +
-               ", chargeBy='" + chargeBy + '\'' +
-               ", bidUnit='" + bidUnit + '\'' +
+               ", bidStrategy=" + bidStrategy +
+               ", payBy='" + payBy + '\'' +
                ", advertiserDomain='" + advertiserDomain + '\'' +
                ", advertiserUserId='" + advertiserUserId + '\'' +
                ", categories=" + Arrays.toString(categories) +
                ", startTime=" + startTimeInUTC +
                ", endTime=" + endTimeInUTC +
-               ", optimization='" + optimization + '\'' +
+               ", goal='" + goal + '\'' +
                ", creativeSource='" + creativeSource + '\'' +
                ", budget='" + budget + '\'' +
                '}';

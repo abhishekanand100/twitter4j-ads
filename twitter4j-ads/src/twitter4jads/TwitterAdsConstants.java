@@ -14,7 +14,7 @@ public interface TwitterAdsConstants {
     long MAX_VIDEO_WEBSITE_CARD_TITLE_LENGTH = 70L;
     int CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE = 2500;
 
-    int VERSION = 8;
+    int VERSION = 9;
 
     String UPLOAD_MEDIA_URL = "media/";
     String UPLOAD_JSON = "upload.json";
