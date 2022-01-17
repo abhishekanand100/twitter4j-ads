@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * @author akashMaurya
  * @Date 07/06/16.
  */
-public class AudienceSummary {
+public class AudienceEstimate {
 
     @SerializedName("audience_size")
     private TwitterRange audiencesize;

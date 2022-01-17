@@ -14,7 +14,7 @@ public interface TwitterAdsConstants {
     long MAX_VIDEO_WEBSITE_CARD_TITLE_LENGTH = 70L;
     int CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE = 2500;
 
-    int VERSION = 9;
+    int VERSION = 10;
 
     String UPLOAD_MEDIA_URL = "media/";
     String UPLOAD_JSON = "upload.json";
@@ -82,7 +82,6 @@ public interface TwitterAdsConstants {
     String PARAM_BID_TYPE = "bid_type";
     String PARAM_BID_UNIT = "bid_unit";
 
-    String PARAM_AUTOMATICALLY_SELECT_BID = "automatically_select_bid";
     String PARAM_OPTIMIZATION = "optimization";
     String PARAM_CHARGE_BY = "charge_by";
     String PARAM_PRODUCT_TYPE = "product_type";
@@ -274,7 +273,6 @@ public interface TwitterAdsConstants {
     String PATH_CAMPAIGN = "/campaigns/";
     String PATH_FUNDING_INSTRUMENTS = "/funding_instruments/";
 
-    String PATH_BIDDING_RULES = VERSION + "/bidding_rules";
     String PATH_IMAGE_DM_CARDS = "/cards/image_direct_message/";
     String PATH_VIDEO_DM_CARDS = "/cards/video_direct_message/";
     String PATH_PROMOTED_TWEETS = "/promoted_tweets/";
@@ -285,7 +283,7 @@ public interface TwitterAdsConstants {
     String PATH_PROMOTED_ACCOUNTS = "/promoted_accounts/";
     String PARAM_ATTRIBUTABLE_USER_ID = "attributable_user_id";
     String PATH_PROMOTABLE_USERS = "/promotable_users/";
-    String PATH_AUDIENCE_SUMMARY = "/audience_summary/";
+    String PATH_AUDIENCE_ESTIMATE = "/audience_estimate/";
     String PATH_LINE_ITEMS = "/line_items/";
     String PATH_TARGETING_CRITERIA = "/targeting_criteria/";
 
@@ -344,11 +342,6 @@ public interface TwitterAdsConstants {
     String PARAM_DESCRIPTION = "description";
     String PARAM_FILE_NAME = "file_name";
     String UPLOAD_VIDEO_CARD_IMAGE_URL = "https://video.twitter.com/api/v1/images";
-
-    /**
-     * for tracking tag
-     */
-    String PARAM_TRACKING_TAGS = "tracking_tags";
 
     /**
      * for web event tags

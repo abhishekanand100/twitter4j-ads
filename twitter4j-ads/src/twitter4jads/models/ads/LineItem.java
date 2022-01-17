@@ -70,9 +70,6 @@ public class LineItem extends TwitterEntity {
     @SerializedName("updated_at")
     private Date updatedAt;
 
-    @SerializedName("automatically_select_bid")
-    private boolean automaticallySelectBid;
-
     @SerializedName("bid_strategy")
     private BidStrategy bidStrategy;
 
@@ -99,9 +96,6 @@ public class LineItem extends TwitterEntity {
 
     @SerializedName("total_budget_amount_local_micro")
     private Long budget;
-
-    @SerializedName("tracking_tags")
-    private List<TrackingTag> trackingTags;
 
     @SerializedName("entity_status")
     private EntityStatus status;
@@ -242,14 +236,6 @@ public class LineItem extends TwitterEntity {
         this.productType = productType;
     }
 
-    public boolean isAutomaticallySelectBid() {
-        return automaticallySelectBid;
-    }
-
-    public void setAutomaticallySelectBid(boolean automaticallySelectBid) {
-        this.automaticallySelectBid = automaticallySelectBid;
-    }
-
     public BidStrategy getBidStrategy() {
         return bidStrategy;
     }
@@ -304,14 +290,6 @@ public class LineItem extends TwitterEntity {
 
     public void setAdvertiserUserId(String advertiserUserId) {
         this.advertiserUserId = advertiserUserId;
-    }
-
-    public List<TrackingTag> getTrackingTags() {
-        return trackingTags;
-    }
-
-    public void setTrackingTags(List<TrackingTag> trackingTags) {
-        this.trackingTags = trackingTags;
     }
 
     public Date getStartTime() {
@@ -376,7 +354,6 @@ public class LineItem extends TwitterEntity {
                ", suggestedLowCpeBidInMicro=" + suggestedLowCpeBidInMicro +
                ", targetCpaLocalMicro=" + targetCpaLocalMicro +
                ", updatedAt=" + updatedAt +
-               ", automaticallySelectBid=" + automaticallySelectBid +
                ", bidStrategy=" + bidStrategy +
                ", payBy='" + payBy + '\'' +
                ", advertiserDomain='" + advertiserDomain + '\'' +

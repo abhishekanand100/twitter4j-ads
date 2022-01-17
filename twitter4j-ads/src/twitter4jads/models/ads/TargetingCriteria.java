@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.annotations.SerializedName;
 import twitter4jads.models.LocationType;
-import twitter4jads.models.ads.audience.CustomAudienceType;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -56,12 +55,6 @@ public class TargetingCriteria extends TwitterEntity {
     @SerializedName("show_count")
     private Integer showCount;
 
-    @SerializedName("custom_audience_type")
-    private CustomAudienceType customAudienceType;
-
-    @SerializedName("custom_audience_expansion")
-    private boolean customAudienceExpansion;
-
     @SerializedName("locale")
     private String tvMarketLocale;
 
@@ -112,15 +105,6 @@ public class TargetingCriteria extends TwitterEntity {
 
     public Integer getEstimatedUsers() {
         return estimatedUsers;
-    }
-
-    public CustomAudienceType getCustomAudienceType() {
-        return customAudienceType;
-    }
-
-    @SuppressWarnings("unused")
-    public void setCustomAudienceType(CustomAudienceType customAudienceType) {
-        this.customAudienceType = customAudienceType;
     }
 
     @SuppressWarnings("unused")
@@ -211,15 +195,6 @@ public class TargetingCriteria extends TwitterEntity {
         this.updatedAt = updatedAt;
     }
 
-    public boolean isCustomAudienceExpansion() {
-        return customAudienceExpansion;
-    }
-
-    @SuppressWarnings("unused")
-    public void setCustomAudienceExpansion(boolean customAudienceExpansion) {
-        this.customAudienceExpansion = customAudienceExpansion;
-    }
-
     public LocationType getLocationType() {
         return locationType;
     }
@@ -294,8 +269,6 @@ public class TargetingCriteria extends TwitterEntity {
                 ", estimatedUsers=" + estimatedUsers +
                 ", genre='" + genre + '\'' +
                 ", showCount=" + showCount +
-                ", customAudienceType=" + customAudienceType +
-                ", customAudienceExpansion=" + customAudienceExpansion +
                 ", tvMarketLocale='" + tvMarketLocale + '\'' +
                 ", iabCategories=" + Arrays.toString(iabCategories) +
                 ", eventType='" + eventType + '\'' +

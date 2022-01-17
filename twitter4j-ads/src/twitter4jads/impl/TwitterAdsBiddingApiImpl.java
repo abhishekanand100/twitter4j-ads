@@ -3,23 +3,17 @@ package twitter4jads.impl;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gson.reflect.TypeToken;
-import twitter4jads.BaseAdsListResponse;
-import twitter4jads.BaseAdsListResponseIterable;
 import twitter4jads.TwitterAdsClient;
 import twitter4jads.api.TwitterAdsBiddingApi;
 import twitter4jads.internal.http.HttpParameter;
 import twitter4jads.internal.models4j.TwitterException;
-import twitter4jads.models.ads.BiddingRules;
 import twitter4jads.models.ads.HttpVerb;
 import twitter4jads.models.ads.TwitterBidInfo;
 import twitter4jads.util.TwitterAdUtil;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
-import static twitter4jads.TwitterAdsConstants.PARAM_CURRENCY;
-import static twitter4jads.TwitterAdsConstants.PATH_BIDDING_RULES;
 
 /**
  * User: prashant
@@ -31,17 +25,6 @@ public class TwitterAdsBiddingApiImpl implements TwitterAdsBiddingApi {
 
     public TwitterAdsBiddingApiImpl(TwitterAdsClient twitterAdsClient) {
         this.twitterAdsClient = twitterAdsClient;
-    }
-
-    @Override
-    public BaseAdsListResponseIterable<BiddingRules> getBiddingRules(String currency) throws TwitterException {
-        List<HttpParameter> param = new ArrayList<>();
-        String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PATH_BIDDING_RULES;
-        if (TwitterAdUtil.isNotNullOrEmpty(currency)) {
-            param.add(new HttpParameter(PARAM_CURRENCY, currency));
-        }
-        Type type = new TypeToken<BaseAdsListResponse<BiddingRules>>() {}.getType();
-        return twitterAdsClient.executeHttpListRequest(baseUrl, param, type);
     }
 
     /*s

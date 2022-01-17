@@ -16,7 +16,7 @@ import twitter4jads.internal.http.HttpResponse;
 import twitter4jads.internal.models4j.TwitterException;
 import twitter4jads.models.LocationType;
 import twitter4jads.models.ads.AppStoreSearchType;
-import twitter4jads.models.ads.AudienceSummary;
+import twitter4jads.models.ads.AudienceEstimate;
 import twitter4jads.models.ads.Conversations;
 import twitter4jads.models.ads.HttpVerb;
 import twitter4jads.models.ads.IabCategory;
@@ -100,7 +100,7 @@ import static twitter4jads.TwitterAdsConstants.PARAM_USER_ENGAGEMENT;
 import static twitter4jads.TwitterAdsConstants.PARAM_WIFI_ONLY;
 import static twitter4jads.TwitterAdsConstants.PARAM_WITH_DELETED;
 import static twitter4jads.TwitterAdsConstants.PATH_APP_LIST;
-import static twitter4jads.TwitterAdsConstants.PATH_AUDIENCE_SUMMARY;
+import static twitter4jads.TwitterAdsConstants.PATH_AUDIENCE_ESTIMATE;
 import static twitter4jads.TwitterAdsConstants.PATH_BEHAVIORS;
 import static twitter4jads.TwitterAdsConstants.PATH_BEHAVIORS_TAXONOMY;
 import static twitter4jads.TwitterAdsConstants.PATH_IAB_CATEGORIES;
@@ -282,14 +282,14 @@ public class TwitterAdsTargetingApiImpl implements TwitterAdsTargetingApi {
     }
 
     @Override
-    public BaseAdsResponse<AudienceSummary> getAudienceSummary(String accountId, AudienceSummaryRequest audienceSummaryRequest)
+    public BaseAdsResponse<AudienceEstimate> getAudienceSummary(String accountId, AudienceSummaryRequest audienceSummaryRequest)
         throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         TwitterAdUtil.ensureNotNull(audienceSummaryRequest, "audienceSummaryRequest");
 
         final String url = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
-                + PATH_AUDIENCE_SUMMARY;
-        final Type type = new TypeToken<BaseAdsResponse<AudienceSummary>>() {
+                + PATH_AUDIENCE_ESTIMATE;
+        final Type type = new TypeToken<BaseAdsResponse<AudienceEstimate>>() {
         }.getType();
 
         HttpResponse httpResponse = twitterAdsClient.postRequest(url, GSON.toJson(audienceSummaryRequest));
