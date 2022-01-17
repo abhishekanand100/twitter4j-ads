@@ -5,7 +5,7 @@ import twitter4jads.models.ads.TargetingCriteria;
 
 import java.util.List;
 
-public class AudienceSummaryRequest {
+public class AudienceEstimateRequest {
 
     @SerializedName("targeting_criteria")
     private List<TargetingCriteria> targetingCriteria;
