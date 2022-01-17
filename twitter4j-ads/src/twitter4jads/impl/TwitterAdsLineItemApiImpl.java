@@ -44,7 +44,7 @@ import static twitter4jads.TwitterAdsConstants.PARAM_ACCOUNT_MEDIA_ID;
 import static twitter4jads.TwitterAdsConstants.PARAM_ADVERTISER_DOMAIN;
 import static twitter4jads.TwitterAdsConstants.PARAM_APP_STORE_IDENTIFIER;
 import static twitter4jads.TwitterAdsConstants.PARAM_BID_AMOUNT_LOCAL_MICRO;
-import static twitter4jads.TwitterAdsConstants.PARAM_BID_TYPE;
+import static twitter4jads.TwitterAdsConstants.PARAM_BID_STRATEGY;
 import static twitter4jads.TwitterAdsConstants.PARAM_BID_UNIT;
 import static twitter4jads.TwitterAdsConstants.PARAM_CALL_TO_ACTION;
 import static twitter4jads.TwitterAdsConstants.PARAM_CALL_TO_ACTION_URL;
@@ -145,19 +145,19 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
     }
 
     @Override
-    public BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidStrategy bidType,
+    public BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidStrategy bidStrategy,
                                                     Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
                                                     Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy,
                                                     Optional<String> bidUnit, Optional<String> advertiserDomain, String optimization,
                                                     String[] iabCategories, String startTime, String endTime, String name,
                                                     Long targetCPA, Long budget) throws TwitterException {
-        if (bidType == null) {
+        if (bidStrategy == null) {
             bidAmountLocalMicro = null;
-            bidType = BidStrategy.AUTO;
+            bidStrategy = BidStrategy.AUTO;
         }
 
         final List<HttpParameter> params =
-                validateUpdateLineItemParameters(accountId, lineItemId, bidType, bidAmountLocalMicro, status,
+                validateUpdateLineItemParameters(accountId, lineItemId, bidStrategy, bidAmountLocalMicro, status,
                         includeSentiment, matchRelevantPopularQueries, chargeBy, bidUnit, optimization, advertiserDomain, iabCategories, budget, name, startTime, endTime, targetCPA);
         String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5 + accountId
                 + PATH_LINE_ITEMS +
@@ -479,14 +479,14 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
 
     // -------------------------------------------------------------------- PRIVATE METHODS ---------------------------------------------------------
 
-    private List<HttpParameter> validateCreateLineItemParameters(Optional<String> campaignId, BidStrategy bidType, Optional<Long> bidAmountLocalMicro,
+    private List<HttpParameter> validateCreateLineItemParameters(Optional<String> campaignId, BidStrategy bidStrategy, Optional<Long> bidAmountLocalMicro,
                                                                  Optional<ProductType> productType, List<Placement> placements,
                                                                  EntityStatus status, Optional<Sentiments> includeSentiment, Optional<Boolean> matchRelevantPopularQueries,
                                                                  Optional<String> objective, Optional<String> chargeBy,
                                                                  Optional<String> advertiserDomain, String[] categories, String webEventTag, String name,
                                                                  Optional<Date> startTime, Optional<Date> endTime,
                                                                  Long targetCpaLocalMicro, Long budget) {
-        if (bidType == BidStrategy.TARGET || bidType == BidStrategy.MAX) {
+        if (bidStrategy == BidStrategy.TARGET || bidStrategy == BidStrategy.MAX) {
             TwitterAdUtil.ensureNotNull(bidAmountLocalMicro, "Bid amount cannot be null for TARGET or MAX Bid Type");
         }
 
@@ -495,9 +495,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             params.add(new HttpParameter(PARAM_CAMPAIGN_ID, campaignId.get()));
         }
 
-        if (bidType != null) {
-            params.add(new HttpParameter(PARAM_BID_TYPE, bidType.name()));
-        }
+        params.add(new HttpParameter(PARAM_BID_STRATEGY, bidStrategy.name()));
 
         if (TwitterAdUtil.isNotNull(bidAmountLocalMicro) && bidAmountLocalMicro.isPresent()) {
             params.add(new HttpParameter(PARAM_BID_AMOUNT_LOCAL_MICRO, bidAmountLocalMicro.get()));
@@ -561,16 +559,16 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
         return params;
     }
 
-    private List<HttpParameter> validateUpdateLineItemParameters(String accountId, String lineItemId, BidStrategy bidType,
+    private List<HttpParameter> validateUpdateLineItemParameters(String accountId, String lineItemId, BidStrategy bidStrategy,
                                                                  Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
                                                                  Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy, Optional<String> bidUnit, String optimization,
                                                                  Optional<String> advertiserDomain, String[] iabCategories, Long budget, String name,
                                                                  String startTime, String endTime, Long targetCPA) {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         TwitterAdUtil.ensureNotNull(lineItemId, "Line Item Id");
-        TwitterAdUtil.ensureNotNull(bidType, "Bid Type");
+        TwitterAdUtil.ensureNotNull(bidStrategy, "Bid Strategy");
 
-        if (bidType == BidStrategy.TARGET || bidType == BidStrategy.MAX) {
+        if (bidStrategy == BidStrategy.TARGET || bidStrategy == BidStrategy.MAX) {
             TwitterAdUtil.ensureNotNull(bidAmountLocalMicro, "Bid amount cannot be null for TARGET or MAX Bid Type");
         }
 
@@ -578,7 +576,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
         if (TwitterAdUtil.isNotNull(bidAmountLocalMicro) && bidAmountLocalMicro.isPresent()) {
             params.add(new HttpParameter(PARAM_BID_AMOUNT_LOCAL_MICRO, bidAmountLocalMicro.get()));
         }
-        params.add(new HttpParameter(PARAM_BID_TYPE, bidType.name()));
+        params.add(new HttpParameter(PARAM_BID_STRATEGY, bidStrategy.name()));
 
         if (chargeBy != null && chargeBy.isPresent()) {
             params.add(new HttpParameter(PARAM_CHARGE_BY, chargeBy.get()));
@@ -603,7 +601,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             params.add(new HttpParameter(PARAM_OPTIMIZATION, optimization));
         }
 
-        if (bidType == BidStrategy.AUTO) {
+        if (bidStrategy == BidStrategy.AUTO) {
             params.add(new HttpParameter(PARAM_BID_AMOUNT_LOCAL_MICRO, "null"));
         }
 

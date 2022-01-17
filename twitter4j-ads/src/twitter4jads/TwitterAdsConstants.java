@@ -79,7 +79,7 @@ public interface TwitterAdsConstants {
     String PARAM_CAMPAIGN_ID = "campaign_id";
     String PARAM_BID_AMOUNT_LOCAL_MICRO = "bid_amount_local_micro";
     String PARAM_TARGET_CPA_LOCAL_MICRO = "target_cpa_local_micro";
-    String PARAM_BID_TYPE = "bid_type";
+    String PARAM_BID_STRATEGY = "bid_strategy";
     String PARAM_BID_UNIT = "bid_unit";
 
     String PARAM_OPTIMIZATION = "optimization";
@@ -92,7 +92,6 @@ public interface TwitterAdsConstants {
     String CAMPAIGN_DAILY_BUDGET_AMOUNT_LOCAL_MICRO = "campaign_daily_budget_amount_local_micro";
     String BID_AMOUNT_LOCAL_MICRO = "bid_amount_local_micro";
 
-    String BID_TYPE = "bid_type";
     String USERS = "users";
     String PARAM_INCLUDE_SENTIMENT = "include_sentiment";
     String PARAM_SUGGESTION_TYPE = "suggestion_type";

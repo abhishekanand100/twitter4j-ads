@@ -66,7 +66,7 @@ public interface TwitterAdsLineItemApi {
     /**
      * @param accountId              The identifier for the leveraged account.
      * @param lineItemId             The line item identifier of the line item to update.
-     * @param bidType                The BidType to use on this line item.
+     * @param bidStrategy            The BidStrategy to use on this line item.
      * @param bidAmountLocalMicro    (optional) Specify a new bid to set on this line item.
      * @param status                 Status to set
      * @param includeSentiment       (optional) Update the include sentiment parameter of line item.
@@ -78,7 +78,7 @@ public interface TwitterAdsLineItemApi {
      * @throws TwitterException
      * @see <a href="https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/line_items/%3Aline_item_id">https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/line_items/%3Aline_item_id</a>
      */
-    BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidStrategy bidType,
+    BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidStrategy bidStrategy,
                                              Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
                                              Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy,
                                              Optional<String> bidUnit, Optional<String> advertiserDomain, String optimization,
