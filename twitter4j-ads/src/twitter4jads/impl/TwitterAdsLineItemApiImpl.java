@@ -495,11 +495,12 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             params.add(new HttpParameter(PARAM_CAMPAIGN_ID, campaignId.get()));
         }
 
+        if (bidType != null) {
+            params.add(new HttpParameter(PARAM_BID_TYPE, bidType.name()));
+        }
+
         if (TwitterAdUtil.isNotNull(bidAmountLocalMicro) && bidAmountLocalMicro.isPresent()) {
             params.add(new HttpParameter(PARAM_BID_AMOUNT_LOCAL_MICRO, bidAmountLocalMicro.get()));
-            if (bidType != null) {
-                params.add(new HttpParameter(PARAM_BID_TYPE, bidType.name()));
-            }
         }
 
         if (chargeBy != null && chargeBy.isPresent()) {
