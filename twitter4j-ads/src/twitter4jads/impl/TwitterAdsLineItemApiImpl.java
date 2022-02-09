@@ -126,7 +126,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
                         Optional.fromNullable(lineItem.getAdvertiserDomain()),
                         lineItem.getCategories(), lineItem.getWebEventTag(), lineItem.getName(),
                         Optional.fromNullable(lineItem.getStartTime()), Optional.fromNullable(lineItem.getEndTime()),
-                        lineItem.getTargetCpaLocalMicro(), lineItem.getBudget());
+                        lineItem.getTargetCpaLocalMicro(), lineItem.getBudget(), lineItem.getGoal());
         HttpParameter[] parameters = null;
         if (!params.isEmpty()) {
             parameters = params.toArray(new HttpParameter[params.size()]);
@@ -148,7 +148,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
     public BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidStrategy bidStrategy,
                                                     Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
                                                     Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy,
-                                                    Optional<String> bidUnit, Optional<String> advertiserDomain, String optimization,
+                                                    Optional<String> bidUnit, Optional<String> advertiserDomain, String goal,
                                                     String[] iabCategories, String startTime, String endTime, String name,
                                                     Long targetCPA, Long budget) throws TwitterException {
         if (bidStrategy == null) {
@@ -158,7 +158,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
 
         final List<HttpParameter> params =
                 validateUpdateLineItemParameters(accountId, lineItemId, bidStrategy, bidAmountLocalMicro, status,
-                        includeSentiment, matchRelevantPopularQueries, chargeBy, bidUnit, optimization, advertiserDomain, iabCategories, budget, name, startTime, endTime, targetCPA);
+                        includeSentiment, matchRelevantPopularQueries, chargeBy, bidUnit, goal, advertiserDomain, iabCategories, budget, name, startTime, endTime, targetCPA);
         String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5 + accountId
                 + PATH_LINE_ITEMS +
                 lineItemId;
@@ -485,7 +485,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
                                                                  Optional<String> objective, Optional<String> chargeBy,
                                                                  Optional<String> advertiserDomain, String[] categories, String webEventTag, String name,
                                                                  Optional<Date> startTime, Optional<Date> endTime,
-                                                                 Long targetCpaLocalMicro, Long budget) {
+                                                                 Long targetCpaLocalMicro, Long budget, String goal) {
         if (bidStrategy == BidStrategy.TARGET || bidStrategy == BidStrategy.MAX) {
             TwitterAdUtil.ensureNotNull(bidAmountLocalMicro, "Bid amount cannot be null for TARGET or MAX Bid Type");
         }
@@ -563,7 +563,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
 
     private List<HttpParameter> validateUpdateLineItemParameters(String accountId, String lineItemId, BidStrategy bidStrategy,
                                                                  Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
-                                                                 Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy, Optional<String> bidUnit, String optimization,
+                                                                 Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy, Optional<String> bidUnit, String goal,
                                                                  Optional<String> advertiserDomain, String[] iabCategories, Long budget, String name,
                                                                  String startTime, String endTime, Long targetCPA) {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
@@ -599,8 +599,8 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             params.add(new HttpParameter(PARAM_END_TIME, String.valueOf(endTime)));
         }
 
-        if (TwitterAdUtil.isNotNullOrEmpty(optimization)) {
-            params.add(new HttpParameter(PARAM_OPTIMIZATION, optimization));
+        if (TwitterAdUtil.isNotNullOrEmpty(goal)) {
+            params.add(new HttpParameter(PARAM_GOAL, goal));
         }
 
         if (bidStrategy == BidStrategy.AUTO) {

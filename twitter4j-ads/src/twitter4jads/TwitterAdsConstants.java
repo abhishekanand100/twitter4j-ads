@@ -82,7 +82,7 @@ public interface TwitterAdsConstants {
     String PARAM_BID_STRATEGY = "bid_strategy";
     String PARAM_BID_UNIT = "bid_unit";
 
-    String PARAM_OPTIMIZATION = "optimization";
+    String PARAM_GOAL = "goal";
     String PARAM_CHARGE_BY = "charge_by";
     String PARAM_PRODUCT_TYPE = "product_type";
     String PARAM_PLACEMENTS = "placements";
