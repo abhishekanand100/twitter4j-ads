@@ -57,6 +57,7 @@ import static twitter4jads.TwitterAdsConstants.PARAM_CURSOR;
 import static twitter4jads.TwitterAdsConstants.PARAM_END_TIME;
 import static twitter4jads.TwitterAdsConstants.PARAM_ENTITY_STATUS;
 import static twitter4jads.TwitterAdsConstants.PARAM_FUNDING_INSTRUMENT_IDS;
+import static twitter4jads.TwitterAdsConstants.PARAM_GOAL;
 import static twitter4jads.TwitterAdsConstants.PARAM_ID;
 import static twitter4jads.TwitterAdsConstants.PARAM_INCLUDE_SENTIMENT;
 import static twitter4jads.TwitterAdsConstants.PARAM_LANDING_URL;
@@ -65,7 +66,6 @@ import static twitter4jads.TwitterAdsConstants.PARAM_LINE_ITEM_ID;
 import static twitter4jads.TwitterAdsConstants.PARAM_LINE_ITEM_IDS;
 import static twitter4jads.TwitterAdsConstants.PARAM_MATCH_RELEVANT_POPULAR_QUERIES;
 import static twitter4jads.TwitterAdsConstants.PARAM_NAME;
-import static twitter4jads.TwitterAdsConstants.PARAM_OBJECTIVE;
 import static twitter4jads.TwitterAdsConstants.PARAM_OPTIMIZATION;
 import static twitter4jads.TwitterAdsConstants.PARAM_OS_TYPE;
 import static twitter4jads.TwitterAdsConstants.PARAM_PLACEMENTS;
@@ -482,7 +482,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
     private List<HttpParameter> validateCreateLineItemParameters(Optional<String> campaignId, BidStrategy bidStrategy, Optional<Long> bidAmountLocalMicro,
                                                                  Optional<ProductType> productType, List<Placement> placements,
                                                                  EntityStatus status, Optional<Sentiments> includeSentiment, Optional<Boolean> matchRelevantPopularQueries,
-                                                                 Optional<String> objective, Optional<String> chargeBy,
+                                                                 Optional<String> goal, Optional<String> chargeBy,
                                                                  Optional<String> advertiserDomain, String[] categories, String webEventTag, String name,
                                                                  Optional<Date> startTime, Optional<Date> endTime,
                                                                  Long targetCpaLocalMicro, Long budget) {
@@ -517,12 +517,12 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
         if (matchRelevantPopularQueries != null && matchRelevantPopularQueries.isPresent()) {
             params.add(new HttpParameter(PARAM_MATCH_RELEVANT_POPULAR_QUERIES, matchRelevantPopularQueries.get()));
         }
-        if (objective != null && objective.isPresent()) {
-            params.add(new HttpParameter(PARAM_OBJECTIVE, objective.get()));
+        if (goal != null && goal.isPresent()) {
+            params.add(new HttpParameter(PARAM_GOAL, goal.get()));
 
-            // Twitter Audience Platform is supported for these objectives only
-            if (TwitterAdUtil.ENGAGEMENTS.equals(objective.get()) || TwitterAdUtil.VIDEO_VIEWS.equals(objective.get()) ||
-                    TwitterAdUtil.WEBSITE_CLICKS.equals(objective.get())) {
+            // Twitter Audience Platform is supported for these goals only
+            if (TwitterAdUtil.ENGAGEMENTS.equals(goal.get()) || TwitterAdUtil.VIDEO_VIEWS.equals(goal.get()) ||
+                    TwitterAdUtil.WEBSITE_CLICKS.equals(goal.get())) {
                 if (advertiserDomain != null && advertiserDomain.isPresent()) {
                     params.add(new HttpParameter(PARAM_ADVERTISER_DOMAIN, advertiserDomain.get()));
                 }
@@ -532,8 +532,8 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             }
         }
 
-        if (objective != null && objective.isPresent() &&
-                TwitterAdUtil.TARGET_CPA_SUPPORTED_OBJECTIVES.contains(TwitterAdObjective.valueOf(objective.get()))) {
+        if (goal != null && goal.isPresent() &&
+                TwitterAdUtil.TARGET_CPA_SUPPORTED_OBJECTIVES.contains(TwitterAdObjective.valueOf(goal.get()))) {
             if (TwitterAdUtil.isNotNull(targetCpaLocalMicro)) {
                 params.add(new HttpParameter(PARAM_TARGET_CPA_LOCAL_MICRO, targetCpaLocalMicro));
             }

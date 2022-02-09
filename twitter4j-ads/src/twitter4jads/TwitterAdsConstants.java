@@ -87,7 +87,7 @@ public interface TwitterAdsConstants {
     String PARAM_PRODUCT_TYPE = "product_type";
     String PARAM_PLACEMENTS = "placements";
     String PARAM_MATCH_RELEVANT_POPULAR_QUERIES = "match_relevant_popular_queries";
-    String PARAM_OBJECTIVE = "objective";
+    String PARAM_GOAL = "goal";
     String CURRENCY = "currency";
     String CAMPAIGN_DAILY_BUDGET_AMOUNT_LOCAL_MICRO = "campaign_daily_budget_amount_local_micro";
     String BID_AMOUNT_LOCAL_MICRO = "bid_amount_local_micro";
