@@ -66,7 +66,7 @@ import static twitter4jads.TwitterAdsConstants.PARAM_LINE_ITEM_ID;
 import static twitter4jads.TwitterAdsConstants.PARAM_LINE_ITEM_IDS;
 import static twitter4jads.TwitterAdsConstants.PARAM_MATCH_RELEVANT_POPULAR_QUERIES;
 import static twitter4jads.TwitterAdsConstants.PARAM_NAME;
-import static twitter4jads.TwitterAdsConstants.PARAM_OPTIMIZATION;
+import static twitter4jads.TwitterAdsConstants.PARAM_OBJECTIVE;
 import static twitter4jads.TwitterAdsConstants.PARAM_OS_TYPE;
 import static twitter4jads.TwitterAdsConstants.PARAM_PLACEMENTS;
 import static twitter4jads.TwitterAdsConstants.PARAM_PRIMARY_WEB_EVENT_TAG;
@@ -482,7 +482,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
     private List<HttpParameter> validateCreateLineItemParameters(Optional<String> campaignId, BidStrategy bidStrategy, Optional<Long> bidAmountLocalMicro,
                                                                  Optional<ProductType> productType, List<Placement> placements,
                                                                  EntityStatus status, Optional<Sentiments> includeSentiment, Optional<Boolean> matchRelevantPopularQueries,
-                                                                 Optional<String> goal, Optional<String> chargeBy,
+                                                                 Optional<String> objective, Optional<String> chargeBy,
                                                                  Optional<String> advertiserDomain, String[] categories, String webEventTag, String name,
                                                                  Optional<Date> startTime, Optional<Date> endTime,
                                                                  Long targetCpaLocalMicro, Long budget) {
@@ -517,12 +517,12 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
         if (matchRelevantPopularQueries != null && matchRelevantPopularQueries.isPresent()) {
             params.add(new HttpParameter(PARAM_MATCH_RELEVANT_POPULAR_QUERIES, matchRelevantPopularQueries.get()));
         }
-        if (goal != null && goal.isPresent()) {
-            params.add(new HttpParameter(PARAM_GOAL, goal.get()));
+        if (objective != null && objective.isPresent()) {
+            params.add(new HttpParameter(PARAM_OBJECTIVE, objective.get()));
 
-            // Twitter Audience Platform is supported for these goals only
-            if (TwitterAdUtil.ENGAGEMENTS.equals(goal.get()) || TwitterAdUtil.VIDEO_VIEWS.equals(goal.get()) ||
-                    TwitterAdUtil.WEBSITE_CLICKS.equals(goal.get())) {
+            // Twitter Audience Platform is supported for these objectives only
+            if (TwitterAdUtil.ENGAGEMENTS.equals(objective.get()) || TwitterAdUtil.VIDEO_VIEWS.equals(objective.get()) ||
+                    TwitterAdUtil.WEBSITE_CLICKS.equals(objective.get())) {
                 if (advertiserDomain != null && advertiserDomain.isPresent()) {
                     params.add(new HttpParameter(PARAM_ADVERTISER_DOMAIN, advertiserDomain.get()));
                 }
@@ -531,9 +531,11 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
                 }
             }
         }
-
-        if (goal != null && goal.isPresent() &&
-                TwitterAdUtil.TARGET_CPA_SUPPORTED_OBJECTIVES.contains(TwitterAdObjective.valueOf(goal.get()))) {
+        if (TwitterAdUtil.isNotNullOrEmpty(goal)) {
+            params.add(new HttpParameter(PARAM_GOAL, goal));
+        }
+        if (objective != null && objective.isPresent() &&
+                TwitterAdUtil.TARGET_CPA_SUPPORTED_OBJECTIVES.contains(TwitterAdObjective.valueOf(objective.get()))) {
             if (TwitterAdUtil.isNotNull(targetCpaLocalMicro)) {
                 params.add(new HttpParameter(PARAM_TARGET_CPA_LOCAL_MICRO, targetCpaLocalMicro));
             }
