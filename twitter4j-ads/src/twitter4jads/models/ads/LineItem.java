@@ -100,6 +100,12 @@ public class LineItem extends TwitterEntity {
     @SerializedName("entity_status")
     private EntityStatus status;
 
+    @SerializedName("frequency_cap")
+    private Integer frequencyCap;
+
+    @SerializedName("duration_in_days")
+    private Integer durationInDays;
+
     public String getCreativeSource() {
         return creativeSource;
     }
@@ -330,6 +336,22 @@ public class LineItem extends TwitterEntity {
 
     public void setStatus(EntityStatus status) {
         this.status = status;
+    }
+
+    public Integer getFrequencyCap() {
+        return frequencyCap;
+    }
+
+    public void setFrequencyCap(Integer frequencyCap) {
+        this.frequencyCap = frequencyCap;
+    }
+
+    public Integer getDurationInDays() {
+        return durationInDays;
+    }
+
+    public void setDurationInDays(Integer durationInDays) {
+        this.durationInDays = durationInDays;
     }
 
     @Override
