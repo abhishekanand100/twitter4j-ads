@@ -78,6 +78,8 @@ import static twitter4jads.TwitterAdsConstants.PARAM_TARGET_CPA_LOCAL_MICRO;
 import static twitter4jads.TwitterAdsConstants.PARAM_TOTAL_BUDGET_AMOUNT_LOCAL_MICRO;
 import static twitter4jads.TwitterAdsConstants.PARAM_USER_ID;
 import static twitter4jads.TwitterAdsConstants.PARAM_WITH_DELETED;
+import static twitter4jads.TwitterAdsConstants.PARAM_FREQUENCY_CAP;
+import static twitter4jads.TwitterAdsConstants.PARAM_DURATION_IN_DAYS;
 import static twitter4jads.TwitterAdsConstants.PATH_LINE_ITEMS;
 import static twitter4jads.TwitterAdsConstants.PATH_LINE_ITEM_APPS;
 import static twitter4jads.TwitterAdsConstants.PATH_MEDIA_CREATIVES;
@@ -126,7 +128,8 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
                         Optional.fromNullable(lineItem.getAdvertiserDomain()),
                         lineItem.getCategories(), lineItem.getWebEventTag(), lineItem.getName(),
                         Optional.fromNullable(lineItem.getStartTime()), Optional.fromNullable(lineItem.getEndTime()),
-                        lineItem.getTargetCpaLocalMicro(), lineItem.getBudget(), lineItem.getGoal());
+                        lineItem.getTargetCpaLocalMicro(), lineItem.getBudget(), lineItem.getGoal(),
+                        Optional.fromNullable(lineItem.getFrequencyCap()), Optional.fromNullable(lineItem.getDurationInDays()));
         HttpParameter[] parameters = null;
         if (!params.isEmpty()) {
             parameters = params.toArray(new HttpParameter[params.size()]);
@@ -485,7 +488,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
                                                                  Optional<String> objective, Optional<String> chargeBy,
                                                                  Optional<String> advertiserDomain, String[] categories, String webEventTag, String name,
                                                                  Optional<Date> startTime, Optional<Date> endTime,
-                                                                 Long targetCpaLocalMicro, Long budget, String goal) {
+                                                                 Long targetCpaLocalMicro, Long budget, String goal, Optional<Integer> frequencyCap, Optional<Integer> durationInDays) {
         if (bidStrategy == BidStrategy.TARGET || bidStrategy == BidStrategy.MAX) {
             TwitterAdUtil.ensureNotNull(bidAmountLocalMicro, "Bid amount cannot be null for TARGET or MAX Bid Type");
         }
@@ -557,7 +560,12 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
         if (TwitterAdUtil.isNotEmpty(placements)) {
             params.add(new HttpParameter(PARAM_PLACEMENTS, TwitterAdUtil.getCsv(placements)));
         }
-
+        if (TwitterAdUtil.isNotNull(frequencyCap) && frequencyCap.isPresent()) {
+            params.add(new HttpParameter(PARAM_FREQUENCY_CAP, frequencyCap.get()));
+        }
+        if (TwitterAdUtil.isNotNull(durationInDays)&& durationInDays.isPresent()) {
+            params.add(new HttpParameter(PARAM_DURATION_IN_DAYS, durationInDays.get()));
+        }
         return params;
     }
 

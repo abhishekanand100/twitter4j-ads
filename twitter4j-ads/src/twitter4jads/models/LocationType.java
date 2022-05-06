@@ -8,6 +8,5 @@ package twitter4jads.models;
  * To change this template use File | Settings | File Templates.
  */
 public enum LocationType {
-
-    COUNTRY, CITY, REGION, POSTAL_CODE
+    COUNTRIES, CITIES, REGIONS, POSTAL_CODES, METROS
 }
