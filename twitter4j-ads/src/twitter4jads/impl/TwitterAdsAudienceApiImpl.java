@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 
 import static twitter4jads.TwitterAdsConstants.CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE;
 import static twitter4jads.TwitterAdsConstants.PARAM_CURSOR;
+import static twitter4jads.TwitterAdsConstants.PARAM_Q;
 import static twitter4jads.TwitterAdsConstants.PATH_CUSTOM_AUDIENCE;
 import static twitter4jads.TwitterAdsConstants.PATH_CUSTOM_AUDIENCES;
 import static twitter4jads.TwitterAdsConstants.PATH_CUSTOM_AUDIENCE_MATCHING_RULES;
@@ -69,7 +70,8 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
 
     @Override
     public BaseAdsListResponseIterable<CustomAudience> getAllCustomAudiences(String accountId, Optional<Integer> count,
-                                                                                 Optional<Boolean> withDeleted, Optional<String> cursor)
+                                                                             Optional<Boolean> withDeleted, Optional<String> cursor,
+                                                                             Optional<String> q)
         throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId
@@ -83,6 +85,9 @@ public class TwitterAdsAudienceApiImpl implements TwitterAdsAudienceApi {
         }
         if (cursor != null && cursor.isPresent()) {
             params.add(new HttpParameter(PARAM_CURSOR, cursor.get()));
+        }
+        if (q != null && q.isPresent()) {
+            params.add(new HttpParameter(PARAM_Q, q.get()));
         }
 
         final Type type = new TypeToken<BaseAdsListResponse<CustomAudience>>() {
