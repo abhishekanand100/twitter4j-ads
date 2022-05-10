@@ -25,12 +25,14 @@ public interface TwitterAdsAudienceApi {
      * @param withDeleted (optional) Include deleted results in your request. Defaults to false.
      * @param count       (optional) Limit the number returned per page of requests to the specified amount.
      * @param cursor      (optional) Specifies a cursor to get the next page of CustomAudience objects (function automatically handles paging upon iteration when you do not specify cursor value).
+     * @param q           (optional) An optional query to scope resource by name.
      * @return the collection of CustomAudience objects belonging to the authenticated user.
      * @throws TwitterException
      * @see <a href="https://dev.twitter.com/ads/reference/get/accounts/%3Aaccount_id/custom_audiences">https://dev.twitter.com/ads/reference/get/accounts/%3Aaccount_id/custom_audiences</a>
      */
     BaseAdsListResponseIterable<CustomAudience> getAllCustomAudiences(String accountId, Optional<Integer> count,
-                                                                          Optional<Boolean> withDeleted, Optional<String> cursor)
+                                                                      Optional<Boolean> withDeleted, Optional<String> cursor,
+                                                                      Optional<String> q)
             throws TwitterException;
 
     /**
