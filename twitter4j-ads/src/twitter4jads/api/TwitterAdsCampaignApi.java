@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import twitter4jads.BaseAdsListResponseIterable;
 import twitter4jads.BaseAdsResponse;
 import twitter4jads.internal.models4j.TwitterException;
+import twitter4jads.models.ads.BudgetOptimization;
 import twitter4jads.models.ads.Campaign;
 import twitter4jads.models.ads.EntityStatus;
 import twitter4jads.models.ads.sort.CampaignSortByField;
@@ -64,6 +65,7 @@ public interface TwitterAdsCampaignApi {
      * @param standardDelivery            (optional) Update the standard delivery setting of campaign.
      * @param frequencyCap                (if value passed greater than 0) Update integer representing the number of times for which one user could be delivered an ad to.
      * @param durationInDays              (if value passed greater than 0) Update integer representing the time period within which the frequency_cap frequency is achieved. Only supports values of: 1, 7 and 30.
+     * @param budgetOptimization          (optional) Update the budget optimization setting of campaign.
      * @return updated campaign response.
      * @throws TwitterException
      * @see <a href="https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/campaigns/%3Acampaign_id">https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/campaigns/%3Acampaign_id</a>
@@ -71,7 +73,7 @@ public interface TwitterAdsCampaignApi {
     BaseAdsResponse<Campaign> updateCampaign(String accountId, String campaignId, Optional<String> name,
                                              Long totalBudgetAmountLocalMicro, Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
                                              Optional<String> endTime, EntityStatus status,
-                                             Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays) throws TwitterException;
+                                             Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays, BudgetOptimization budgetOptimization) throws TwitterException;
 
     /**
      * @param accountId  The identifier for the leveraged account.

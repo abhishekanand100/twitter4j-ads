@@ -1,23 +1,20 @@
 package twitter4jads.impl;
 
-import static twitter4jads.TwitterAdsConstants.PARAM_CAMPAIGN_IDS;
-import static twitter4jads.TwitterAdsConstants.PARAM_COUNT;
-import static twitter4jads.TwitterAdsConstants.PARAM_CURSOR;
-import static twitter4jads.TwitterAdsConstants.PARAM_DAILY_BUDGET_AMOUNT_LOCAL_MICRO;
-import static twitter4jads.TwitterAdsConstants.PARAM_DURATION_IN_DAYS;
-import static twitter4jads.TwitterAdsConstants.PARAM_END_TIME;
-import static twitter4jads.TwitterAdsConstants.PARAM_ENTITY_STATUS;
-import static twitter4jads.TwitterAdsConstants.PARAM_FREQUENCY_CAP;
-import static twitter4jads.TwitterAdsConstants.PARAM_FUNDING_INSTRUMENT_ID;
-import static twitter4jads.TwitterAdsConstants.PARAM_FUNDING_INSTRUMENT_IDS;
-import static twitter4jads.TwitterAdsConstants.PARAM_NAME;
-import static twitter4jads.TwitterAdsConstants.PARAM_SORT_BY;
-import static twitter4jads.TwitterAdsConstants.PARAM_STANDARD_DELIVERY;
-import static twitter4jads.TwitterAdsConstants.PARAM_START_TIME;
-import static twitter4jads.TwitterAdsConstants.PARAM_TOTAL_BUDGET_AMOUNT_LOCAL_MICRO;
-import static twitter4jads.TwitterAdsConstants.PARAM_WITH_DELETED;
-import static twitter4jads.TwitterAdsConstants.PATH_CAMPAIGN;
-import static twitter4jads.TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5;
+import com.google.common.base.Optional;
+import com.google.gson.reflect.TypeToken;
+import twitter4jads.BaseAdsListResponse;
+import twitter4jads.BaseAdsListResponseIterable;
+import twitter4jads.BaseAdsResponse;
+import twitter4jads.TwitterAdsClient;
+import twitter4jads.api.TwitterAdsCampaignApi;
+import twitter4jads.internal.http.HttpParameter;
+import twitter4jads.internal.models4j.TwitterException;
+import twitter4jads.models.ads.BudgetOptimization;
+import twitter4jads.models.ads.Campaign;
+import twitter4jads.models.ads.EntityStatus;
+import twitter4jads.models.ads.HttpVerb;
+import twitter4jads.models.ads.sort.CampaignSortByField;
+import twitter4jads.util.TwitterAdUtil;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -26,21 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Optional;
-import com.google.gson.reflect.TypeToken;
-
-import twitter4jads.BaseAdsListResponse;
-import twitter4jads.BaseAdsListResponseIterable;
-import twitter4jads.BaseAdsResponse;
-import twitter4jads.TwitterAdsClient;
-import twitter4jads.api.TwitterAdsCampaignApi;
-import twitter4jads.internal.http.HttpParameter;
-import twitter4jads.internal.models4j.TwitterException;
-import twitter4jads.models.ads.Campaign;
-import twitter4jads.models.ads.EntityStatus;
-import twitter4jads.models.ads.HttpVerb;
-import twitter4jads.models.ads.sort.CampaignSortByField;
-import twitter4jads.util.TwitterAdUtil;
+import static twitter4jads.TwitterAdsConstants.*;
 
 /**
  * User: abhay
@@ -119,11 +102,12 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
     public BaseAdsResponse<Campaign> updateCampaign(String accountId, String campaignId, Optional<String> name,
                                                     Long totalBudgetAmountLocalMicro, Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
                                                     Optional<String> endTime, EntityStatus status,
-                                                    Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays) throws TwitterException {
+                                                    Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays,
+                                                    BudgetOptimization budgetOptimization) throws TwitterException {
 
         final List<HttpParameter> params =
                 validateUpdateCampaignParameters(accountId, campaignId, name, totalBudgetAmountLocalMicro, dailyBudgetAmountLocalMicro, startTime,
-                        endTime, status, standardDelivery, frequencyCap, durationInDays);
+                        endTime, status, standardDelivery, frequencyCap, durationInDays, budgetOptimization);
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId + PATH_CAMPAIGN
                 + campaignId;
         final Type type = new TypeToken<BaseAdsResponse<Campaign>>() {
@@ -188,6 +172,9 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
         if (campaign.getDurationInDays() != null) {
             params.add(new HttpParameter(PARAM_DURATION_IN_DAYS, campaign.getDurationInDays()));
         }
+        if (campaign.getBudgetOptimization() != null) {
+            params.add(new HttpParameter(PARAM_BUDGET_OPTIMIZATION, campaign.getBudgetOptimization().name()));
+        }
 
         return params;
     }
@@ -216,7 +203,7 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
     private List<HttpParameter> validateUpdateCampaignParameters(String accountId, String campaignId, Optional<String> name, Long totalBudgetAmountLocalMicro,
                                                                  Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
                                                                  Optional<String> endTime, EntityStatus status,
-                                                                 Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays) {
+                                                                 Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays, BudgetOptimization budgetOptimization) {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         TwitterAdUtil.ensureNotNull(campaignId, "Campaign Id");
         final List<HttpParameter> params = new ArrayList<>();
@@ -251,6 +238,9 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
         }
         if (durationInDays > 0) {
             params.add(new HttpParameter(PARAM_DURATION_IN_DAYS, durationInDays));
+        }
+        if (budgetOptimization != null) {
+            params.add(new HttpParameter(PARAM_BUDGET_OPTIMIZATION, budgetOptimization.name()));
         }
 
         return params;

@@ -1,16 +1,7 @@
 package twitter4jads.models.ads;
 
 import com.google.gson.annotations.SerializedName;
-import twitter4jads.internal.models4j.GeoLocation;
-import twitter4jads.internal.models4j.HashtagEntity;
-import twitter4jads.internal.models4j.MediaEntity;
-import twitter4jads.internal.models4j.Place;
-import twitter4jads.internal.models4j.RateLimitStatus;
-import twitter4jads.internal.models4j.Status;
-import twitter4jads.internal.models4j.TweetScope;
-import twitter4jads.internal.models4j.URLEntity;
-import twitter4jads.internal.models4j.User;
-import twitter4jads.internal.models4j.UserMentionEntity;
+import twitter4jads.internal.models4j.*;
 import twitter4jads.internal.org.json.JSONObject;
 
 import java.util.Date;
@@ -76,13 +67,13 @@ public class PromotedTweet implements Status {
     }
 
     @Override
-    public long getInReplyToStatusId() {
-        return 0;
+    public String getInReplyToStatusId() {
+        return null;
     }
 
     @Override
-    public long getInReplyToUserId() {
-        return 0;
+    public String getInReplyToUserId() {
+        return null;
     }
 
     @Override
@@ -146,8 +137,8 @@ public class PromotedTweet implements Status {
     }
 
     @Override
-    public long getQuotedStatusId() {
-        return 0;
+    public String getQuotedStatusId() {
+        return null;
     }
 
     @Override

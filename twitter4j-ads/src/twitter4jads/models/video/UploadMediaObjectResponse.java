@@ -8,11 +8,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UploadMediaObjectResponse {
 
-    @SerializedName("media_id_string")
-    private String mediaIdString;
-
     @SerializedName("media_id")
-    private Long mediaId;
+    private String mediaId;
 
     @SerializedName("media_key")
     private String mediaKey;
@@ -37,19 +34,11 @@ public class UploadMediaObjectResponse {
         this.mediaKey = mediaKey;
     }
 
-    public String getMediaIdString() {
-        return mediaIdString;
-    }
-
-    public void setMediaIdString(String mediaIdString) {
-        this.mediaIdString = mediaIdString;
-    }
-
-    public Long getMediaId() {
+    public String getMediaId() {
         return mediaId;
     }
 
-    public void setMediaId(Long mediaId) {
+    public void setMediaId(String mediaId) {
         this.mediaId = mediaId;
     }
 

@@ -14,7 +14,7 @@ public interface TwitterAdsConstants {
     long MAX_VIDEO_WEBSITE_CARD_TITLE_LENGTH = 70L;
     int CUSTOM_AUDIENCE_UPDATE_BATCH_SIZE = 2500;
 
-    int VERSION = 10;
+    int VERSION = 11;
 
     String UPLOAD_MEDIA_URL = "media/";
     String UPLOAD_JSON = "upload.json";
@@ -81,6 +81,7 @@ public interface TwitterAdsConstants {
     String PARAM_TARGET_CPA_LOCAL_MICRO = "target_cpa_local_micro";
     String PARAM_BID_STRATEGY = "bid_strategy";
     String PARAM_BID_UNIT = "bid_unit";
+    String PARAM_BUDGET_OPTIMIZATION = "budget_optimization";
 
     String PARAM_GOAL = "goal";
     String PARAM_CHARGE_BY = "charge_by";

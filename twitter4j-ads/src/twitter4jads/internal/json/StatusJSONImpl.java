@@ -20,18 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import twitter4jads.conf.Configuration;
 import twitter4jads.internal.http.HttpResponse;
 import twitter4jads.internal.logging.Logger;
-import twitter4jads.internal.models4j.GeoLocation;
-import twitter4jads.internal.models4j.HashtagEntity;
-import twitter4jads.internal.models4j.JSONResponse;
-import twitter4jads.internal.models4j.MediaEntity;
-import twitter4jads.internal.models4j.Place;
-import twitter4jads.internal.models4j.ResponseList;
-import twitter4jads.internal.models4j.Status;
-import twitter4jads.internal.models4j.TweetScope;
-import twitter4jads.internal.models4j.TwitterException;
-import twitter4jads.internal.models4j.URLEntity;
-import twitter4jads.internal.models4j.User;
-import twitter4jads.internal.models4j.UserMentionEntity;
+import twitter4jads.internal.models4j.*;
 import twitter4jads.internal.org.json.JSONArray;
 import twitter4jads.internal.org.json.JSONException;
 import twitter4jads.internal.org.json.JSONObject;
@@ -39,11 +28,7 @@ import twitter4jads.internal.org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Date;
 
-import static twitter4jads.internal.json.z_T4JInternalParseUtil.getBoolean;
-import static twitter4jads.internal.json.z_T4JInternalParseUtil.getDate;
-import static twitter4jads.internal.json.z_T4JInternalParseUtil.getLong;
-import static twitter4jads.internal.json.z_T4JInternalParseUtil.getRawString;
-import static twitter4jads.internal.json.z_T4JInternalParseUtil.getUnescapedString;
+import static twitter4jads.internal.json.z_T4JInternalParseUtil.*;
 
 /**
  * A data class representing one single status of a user.
@@ -65,8 +50,8 @@ public final class StatusJSONImpl extends TwitterResponseImpl implements Status,
     private String[] displayTextRange;
     private String source;
     private boolean isTruncated;
-    private long inReplyToStatusId;
-    private long inReplyToUserId;
+    private String inReplyToStatusId;
+    private String inReplyToUserId;
     private boolean isFavorited;
     private String inReplyToScreenName;
     private GeoLocation geoLocation = null;
@@ -80,7 +65,7 @@ public final class StatusJSONImpl extends TwitterResponseImpl implements Status,
     private Status retweetedStatus;
     private Status quotedStatus;
     private Status extendedTweet;
-    private long quotedStatusId;
+    private String quotedStatusId;
     private String quotedStatusIdStr;
     private UserMentionEntity[] userMentionEntities;
     private URLEntity[] urlEntities;
@@ -245,7 +230,7 @@ public final class StatusJSONImpl extends TwitterResponseImpl implements Status,
      * {@inheritDoc}
      */
     @Override
-    public long getInReplyToStatusId() {
+    public String getInReplyToStatusId() {
         return inReplyToStatusId;
     }
 
@@ -253,7 +238,7 @@ public final class StatusJSONImpl extends TwitterResponseImpl implements Status,
      * {@inheritDoc}
      */
     @Override
-    public long getInReplyToUserId() {
+    public String getInReplyToUserId() {
         return inReplyToUserId;
     }
 
@@ -330,7 +315,7 @@ public final class StatusJSONImpl extends TwitterResponseImpl implements Status,
     }
 
     @Override
-    public long getQuotedStatusId() {
+    public String getQuotedStatusId() {
         return quotedStatusId;
     }
 
@@ -428,12 +413,9 @@ public final class StatusJSONImpl extends TwitterResponseImpl implements Status,
         source = getUnescapedString("source", json);
         createdAt = getDate("created_at", json);
         isTruncated = getBoolean("truncated", json);
-        inReplyToStatusId = getLong("in_reply_to_status_id", json);
-        inReplyToStatusIdStr = getRawString("in_reply_to_status_id_str", json);
-        quotedStatusId = getLong("quoted_status_id", json);
-        quotedStatusIdStr = getRawString("quoted_status_id_str", json);
-        inReplyToUserId = getLong("in_reply_to_user_id", json);
-        inReplyToUserIdStr = getRawString("in_reply_to_user_id_str", json);
+        inReplyToStatusId = getRawString("in_reply_to_status_id", json);
+        quotedStatusId = getRawString("quoted_status_id", json);
+        inReplyToUserId = getRawString("in_reply_to_user_id", json);
         isFavorited = getBoolean("favorited", json);
         inReplyToScreenName = getUnescapedString("in_reply_to_screen_name", json);
         retweetCount = getLong("retweet_count", json);

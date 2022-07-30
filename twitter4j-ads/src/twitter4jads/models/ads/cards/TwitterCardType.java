@@ -5,6 +5,7 @@ package twitter4jads.models.ads.cards;
  * Date: 12/06/14
  * Time: 9:54 PM
  */
+@Deprecated
 public enum TwitterCardType {
     APP_DOWNLOAD,
     WEBSITE,
@@ -13,7 +14,5 @@ public enum TwitterCardType {
     IMAGE_APP_DOWNLOAD,
     VIDEO_APP_DOWNLOAD,
     IMAGE_CONVERSATION,
-    VIDEO_CONVERSATION,
-    IMAGE_DIRECT_MESSAGE,
-    VIDEO_DIRECT_MESSAGE
+    VIDEO_CONVERSATION
 }

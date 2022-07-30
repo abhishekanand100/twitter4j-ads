@@ -1,6 +1,7 @@
 package twitter4jads.models.ads;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Campaign extends TwitterEntity implements Serializable {
     @SerializedName("created_at")
     private Date createTimeInUTC;
 
+    @Deprecated
     @SerializedName("end_time")
     private Date endTimeInUTC;
 
@@ -52,6 +54,7 @@ public class Campaign extends TwitterEntity implements Serializable {
     @SerializedName("funding_instrument_id")
     private String fundingInstrumentId;
 
+    @Deprecated
     @SerializedName("start_time")
     private Date startTimeInUTC;
 
@@ -63,6 +66,9 @@ public class Campaign extends TwitterEntity implements Serializable {
 
     @SerializedName("duration_in_days")
     private Integer durationInDays;
+
+    @SerializedName("budget_optimization")
+    private BudgetOptimization budgetOptimization;
 
     public String getName() {
         return name;
@@ -80,10 +86,12 @@ public class Campaign extends TwitterEntity implements Serializable {
         this.createTimeInUTC = createTimeInUTC;
     }
 
+    @Deprecated
     public Date getEndTime() {
         return endTimeInUTC;
     }
 
+    @Deprecated
     public void setEndTime(Date endTimeInUTC) {
         this.endTimeInUTC = endTimeInUTC;
     }
@@ -160,10 +168,12 @@ public class Campaign extends TwitterEntity implements Serializable {
         this.fundingInstrumentId = fundingInstrumentId;
     }
 
+    @Deprecated
     public Date getStartTime() {
         return startTimeInUTC;
     }
 
+    @Deprecated
     public void setStartTime(Date startTimeInUTC) {
         this.startTimeInUTC = startTimeInUTC;
     }
@@ -198,5 +208,13 @@ public class Campaign extends TwitterEntity implements Serializable {
 
     public void setEntityStatus(String entityStatus) {
         this.entityStatus = entityStatus;
+    }
+
+    public BudgetOptimization getBudgetOptimization() {
+        return budgetOptimization;
+    }
+
+    public void setBudgetOptimization(BudgetOptimization budgetOptimization) {
+        this.budgetOptimization = budgetOptimization;
     }
 }

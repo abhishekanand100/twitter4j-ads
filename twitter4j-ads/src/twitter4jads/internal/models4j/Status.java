@@ -85,7 +85,7 @@ public interface Status extends Comparable<Status>, TwitterResponse, EntitySuppo
      * @return the in_reply_to_status_id
      * @since Twitter4J 1.0.4
      */
-    long getInReplyToStatusId();
+    String getInReplyToStatusId();
 
     /**
      * Returns the in_reply_to_user_id
@@ -93,7 +93,7 @@ public interface Status extends Comparable<Status>, TwitterResponse, EntitySuppo
      * @return the in_reply_to_user_id
      * @since Twitter4J 1.0.4
      */
-    long getInReplyToUserId();
+    String getInReplyToUserId();
 
     /**
      * Returns the in_reply_to_screen_name
@@ -155,7 +155,7 @@ public interface Status extends Comparable<Status>, TwitterResponse, EntitySuppo
 
     Status getQuotedStatus();
 
-    long getQuotedStatusId();
+    String getQuotedStatusId();
 
     String getQuotedStatusIdStr();
 
