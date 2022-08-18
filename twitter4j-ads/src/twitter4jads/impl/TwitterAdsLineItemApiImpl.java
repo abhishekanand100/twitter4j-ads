@@ -482,13 +482,14 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             }
         }
 
-        TwitterAdUtil.ensureNotNull(startTime, "Start Time");
         final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        final String formattedStartTime = df.format(startTime);
-        params.add(new HttpParameter(PARAM_START_TIME, formattedStartTime));
+        if (startTime != null && startTime.isPresent()) {
+            final String formattedStartTime = df.format(startTime.get());
+            params.add(new HttpParameter(PARAM_START_TIME, formattedStartTime));
+        }
 
         if (endTime != null && endTime.isPresent()) {
-            String formattedEndTime = df.format(endTime);
+            String formattedEndTime = df.format(endTime.get());
             params.add(new HttpParameter(PARAM_END_TIME, formattedEndTime));
         }
         if (TwitterAdUtil.isNotNull(budget)) {
