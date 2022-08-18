@@ -103,7 +103,7 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
                                                     Long totalBudgetAmountLocalMicro, Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
                                                     Optional<String> endTime, EntityStatus status,
                                                     Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays,
-                                                    BudgetOptimization budgetOptimization) throws TwitterException {
+                                                    Optional<BudgetOptimization> budgetOptimization) throws TwitterException {
 
         final List<HttpParameter> params =
                 validateUpdateCampaignParameters(accountId, campaignId, name, totalBudgetAmountLocalMicro, dailyBudgetAmountLocalMicro, startTime,
@@ -203,7 +203,8 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
     private List<HttpParameter> validateUpdateCampaignParameters(String accountId, String campaignId, Optional<String> name, Long totalBudgetAmountLocalMicro,
                                                                  Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
                                                                  Optional<String> endTime, EntityStatus status,
-                                                                 Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays, BudgetOptimization budgetOptimization) {
+                                                                 Optional<Boolean> standardDelivery, int frequencyCap,
+                                                                 int durationInDays, Optional<BudgetOptimization> budgetOptimization) {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         TwitterAdUtil.ensureNotNull(campaignId, "Campaign Id");
         final List<HttpParameter> params = new ArrayList<>();
@@ -239,8 +240,8 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
         if (durationInDays > 0) {
             params.add(new HttpParameter(PARAM_DURATION_IN_DAYS, durationInDays));
         }
-        if (budgetOptimization != null) {
-            params.add(new HttpParameter(PARAM_BUDGET_OPTIMIZATION, budgetOptimization.name()));
+        if (budgetOptimization != null && budgetOptimization.isPresent()) {
+            params.add(new HttpParameter(PARAM_BUDGET_OPTIMIZATION, budgetOptimization.get().name()));
         }
 
         return params;

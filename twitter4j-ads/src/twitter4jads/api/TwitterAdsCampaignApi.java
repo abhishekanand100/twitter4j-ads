@@ -73,7 +73,8 @@ public interface TwitterAdsCampaignApi {
     BaseAdsResponse<Campaign> updateCampaign(String accountId, String campaignId, Optional<String> name,
                                              Long totalBudgetAmountLocalMicro, Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
                                              Optional<String> endTime, EntityStatus status,
-                                             Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays, BudgetOptimization budgetOptimization) throws TwitterException;
+                                             Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays,
+                                             Optional<BudgetOptimization> budgetOptimization) throws TwitterException;
 
     /**
      * @param accountId  The identifier for the leveraged account.
