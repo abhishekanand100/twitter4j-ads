@@ -129,6 +129,9 @@ public interface TwitterAdsConstants {
     String PARAM_NEGATIVE_BEHAVIOR = "negative_behaviors";
     String PARAM_BEHAVIOR_EXPANDED = "behaviors_expanded";
     String PARAM_CARD_IDS = "card_ids";
+    String PARAM_CARD_URIS = "card_ids";
+    String PARAM_CARD_TYPES = "card_types";
+    String PARAM_INCLUDE_LEGACY_CARDS = "include_legacy_cards";
     String PARAM_IPHONE_APP_ID = "iphone_app_id";
     String PARAM_IPAD_APP_ID = "ipad_app_id";
     String PARAM_GOOGLEPLAY_APP_ID = "googleplay_app_id";
@@ -316,6 +319,7 @@ public interface TwitterAdsConstants {
     String PATH_BEHAVIORS = VERSION + "/targeting_criteria/behaviors/";
 
     String PATH_BEHAVIORS_TAXONOMY = VERSION + "/targeting_criteria/behavior_taxonomies/";
+    String PATH_CARDS = "/cards/";
     String PATH_APP_DOWNLOAD_CARDS = "/cards/app_download/";
     String PATH_IMAGE_APP_DOWNLOAD_CARDS = "/cards/image_app_download/";
     String PATH_VIDEO_APP_DOWNLOAD_CARDS = "/cards/video_app_download/";

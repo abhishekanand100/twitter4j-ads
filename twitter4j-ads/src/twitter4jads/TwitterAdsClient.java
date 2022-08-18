@@ -1,23 +1,8 @@
 package twitter4jads;
 
-import static twitter4jads.TwitterAdsConstants.PATH_MEDIA_LIBRARY;
-import static twitter4jads.TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5;
-import static twitter4jads.TwitterAdsConstants.SLASH;
-import static twitter4jads.TwitterAdsConstants.WAIT_INTERVAL;
-import static twitter4jads.models.media.TwitterMediaLibraryStatus.TRANSCODE_FAILED;
-import static twitter4jads.util.TwitterAdUtil.constructBaseAdsResponse;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-
+import org.apache.commons.lang3.StringUtils;
 import twitter4jads.auth.Authorization;
 import twitter4jads.auth.OAuthSupport;
 import twitter4jads.conf.Configuration;
@@ -32,6 +17,16 @@ import twitter4jads.models.ads.HttpVerb;
 import twitter4jads.models.media.TwitterLibraryMedia;
 import twitter4jads.models.media.TwitterMediaLibraryStatus;
 import twitter4jads.util.TwitterAdUtil;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static twitter4jads.TwitterAdsConstants.*;
+import static twitter4jads.models.media.TwitterMediaLibraryStatus.TRANSCODE_FAILED;
+import static twitter4jads.util.TwitterAdUtil.constructBaseAdsResponse;
 
 /**
  * User: abhay
@@ -153,6 +148,10 @@ public class TwitterAdsClient extends TwitterImpl implements OAuthSupport {
 
     public HttpResponse postRequest(String url, String requestBody) throws TwitterException {
         return super.post(url, requestBody);
+    }
+
+    public HttpResponse putRequest(String url, String requestBody) throws TwitterException {
+        return super.put(url, requestBody);
     }
 
     public HttpResponse postRequest(String url, HttpParameter[] params) throws TwitterException {

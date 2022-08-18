@@ -93,6 +93,10 @@ public final class HttpClientWrapper implements java.io.Serializable {
         return request(new HttpRequest(POST, url, null, requestBody, authorization, this.requestHeaders));
     }
 
+    public HttpResponse putRequest(String url, String requestBody, Authorization authorization) throws TwitterException {
+        return request(new HttpRequest(PUT, url, null, requestBody, authorization, this.requestHeaders));
+    }
+
     public HttpResponse putWithCustomHeaders(String url, HttpParameter[] parameters, Authorization authorization,
                                              Map<String, String> customRequestHeaders, boolean isTonUpload) throws TwitterException {
         Map<String, String> headers = new HashMap<>();

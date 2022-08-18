@@ -2,11 +2,13 @@ package twitter4jads.impl;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import twitter4jads.*;
 import twitter4jads.api.TwitterAdsCardsApi;
 import twitter4jads.internal.http.HttpParameter;
+import twitter4jads.internal.http.HttpResponse;
 import twitter4jads.internal.models4j.Media;
 import twitter4jads.internal.models4j.MediaUpload;
 import twitter4jads.internal.models4j.TwitterException;
@@ -33,6 +35,8 @@ import static twitter4jads.util.TwitterAdUtil.isNotNullOrEmpty;
  */
 public class TwitterAdsCardsApiImpl implements TwitterAdsCardsApi {
 
+    private static final Gson GSON = new Gson();
+
     private final TwitterAdsClient twitterAdsClient;
 
     private static final int CONVERSATION_CARD_HASHTAG_LENGTH = 20;
@@ -43,23 +47,91 @@ public class TwitterAdsCardsApiImpl implements TwitterAdsCardsApi {
     }
 
     @Override
-    public BaseAdsListResponseIterable<Card> getCards(String accountId, List<CardType> cardTypes, List<String> cardIds, List<String> cardUris, boolean includeLegacyCards, Optional<String> q, Optional<String> sortBy, boolean withDeleted, Optional<Integer> count, Optional<String> cursor) throws TwitterException {
-        return null;
+    public BaseAdsListResponseIterable<Card> getCards(String accountId, List<CardType> cardTypes, List<String> cardIds,
+                                                      List<String> cardUris, boolean includeLegacyCards,
+                                                      Optional<String> q, Optional<String> sortBy,
+                                                      boolean withDeleted, Optional<Integer> count,
+                                                      Optional<String> cursor) throws TwitterException {
+        TwitterAdUtil.ensureNotNull(accountId, "AccountId");
+        List<HttpParameter> params = Lists.newArrayList();
+
+        if (TwitterAdUtil.isNotEmpty(cardTypes)) {
+            params.add(new HttpParameter(PARAM_CARD_TYPES, TwitterAdUtil.getCsv(cardTypes)));
+        }
+
+        if (TwitterAdUtil.isNotEmpty(cardIds)) {
+            params.add(new HttpParameter(PARAM_CARD_IDS, TwitterAdUtil.getCsv(cardIds)));
+        }
+
+        if (TwitterAdUtil.isNotEmpty(cardIds)) {
+            params.add(new HttpParameter(PARAM_CARD_URIS, TwitterAdUtil.getCsv(cardUris)));
+        }
+
+        if (count != null && count.isPresent()) {
+            params.add(new HttpParameter(PARAM_COUNT, count.get()));
+        }
+
+        if (cursor != null && cursor.isPresent()) {
+            params.add(new HttpParameter(PARAM_CURSOR, cursor.get()));
+        }
+
+        params.add(new HttpParameter(PARAM_INCLUDE_LEGACY_CARDS, includeLegacyCards));
+
+        if (q != null && q.isPresent()) {
+            params.add(new HttpParameter(PARAM_Q, q.get()));
+        }
+
+        if (sortBy != null && sortBy.isPresent()) {
+            params.add(new HttpParameter(PARAM_SORT_BY, sortBy.get()));
+        }
+
+        params.add(new HttpParameter(PARAM_WITH_DELETED, withDeleted));
+
+        String url = twitterAdsClient.getBaseAdsAPIUrl() + TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5 + accountId
+                + PATH_CARDS;
+        Type type = new TypeToken<BaseAdsListResponse<TwitterImageAppDownloadCard>>() {
+        }.getType();
+        return twitterAdsClient.executeHttpListRequest(url, params, type);
     }
 
     @Override
     public BaseAdsResponse<Card> createCard(Card card) throws TwitterException {
-        return null;
+        TwitterAdUtil.ensureNotNull(card, "Card");
+        TwitterAdUtil.ensureNotNull(card.getAccountId(), "AccountId");
+
+        final String url = twitterAdsClient.getBaseAdsAPIUrl() + TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5 +
+                card.getAccountId() + PATH_CARDS;
+        final Type type = new TypeToken<BaseAdsResponse<Card>>() {
+        }.getType();
+
+        HttpResponse httpResponse = twitterAdsClient.postRequest(url, GSON.toJson(card));
+        return GSON.fromJson(httpResponse.asString(), type);
     }
 
     @Override
     public BaseAdsResponse<Card> updateCard(Card card) throws TwitterException {
-        return null;
+        TwitterAdUtil.ensureNotNull(card, "Card");
+        TwitterAdUtil.ensureNotNull(card.getAccountId(), "AccountId");
+
+        final String url = twitterAdsClient.getBaseAdsAPIUrl() + TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5 +
+                card.getAccountId() + PATH_CARDS;
+        final Type type = new TypeToken<BaseAdsResponse<Card>>() {
+        }.getType();
+
+
+        HttpResponse httpResponse = twitterAdsClient.putRequest(url, GSON.toJson(card));
+        return GSON.fromJson(httpResponse.asString(), type);
     }
 
     @Override
     public BaseAdsResponse<Card> deleteCard(String accountId, String cardId) throws TwitterException {
-        return null;
+        TwitterAdUtil.ensureNotNull(cardId, "Card Id");
+        TwitterAdUtil.ensureNotNull(accountId, "Account Id");
+        String url = twitterAdsClient.getBaseAdsAPIUrl() + TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5 + accountId
+                + PATH_CARDS + cardId;
+        Type type = new TypeToken<BaseAdsResponse<TwitterImageAppDownloadCard>>() {
+        }.getType();
+        return twitterAdsClient.executeHttpRequest(url, null, type, HttpVerb.DELETE);
     }
 
     @SuppressWarnings("Duplicates")

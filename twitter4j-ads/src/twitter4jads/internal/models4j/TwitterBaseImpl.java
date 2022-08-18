@@ -16,18 +16,19 @@
 
 package twitter4jads.internal.models4j;
 
-import static twitter4jads.internal.http.HttpResponseCode.ENHANCE_YOUR_CLAIM;
-import static twitter4jads.internal.http.HttpResponseCode.SERVICE_UNAVAILABLE;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import twitter4jads.auth.*;
+import twitter4jads.conf.Configuration;
+import twitter4jads.internal.http.*;
+import twitter4jads.internal.json.z_T4JInternalFactory;
+import twitter4jads.internal.json.z_T4JInternalJSONImplFactory;
+import twitter4jads.models.ads.HttpVerb;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -35,31 +36,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import twitter4jads.auth.AccessToken;
-import twitter4jads.auth.Authorization;
-import twitter4jads.auth.AuthorizationFactory;
-import twitter4jads.auth.BasicAuthorization;
-import twitter4jads.auth.NullAuthorization;
-import twitter4jads.auth.OAuthAuthorization;
-import twitter4jads.auth.OAuthSupport;
-import twitter4jads.auth.RequestToken;
-import twitter4jads.conf.Configuration;
-import twitter4jads.internal.http.HttpClientWrapper;
-import twitter4jads.internal.http.HttpParameter;
-import twitter4jads.internal.http.HttpResponse;
-import twitter4jads.internal.http.HttpResponseEvent;
-import twitter4jads.internal.http.HttpResponseListener;
-import twitter4jads.internal.http.XAuthAuthorization;
-import twitter4jads.internal.json.z_T4JInternalFactory;
-import twitter4jads.internal.json.z_T4JInternalJSONImplFactory;
-import twitter4jads.models.ads.HttpVerb;
+import static twitter4jads.internal.http.HttpResponseCode.ENHANCE_YOUR_CLAIM;
+import static twitter4jads.internal.http.HttpResponseCode.SERVICE_UNAVAILABLE;
 
 /**
  * Base class of Twitter / AsyncTwitter / TwitterStream supports OAuth.
@@ -793,6 +771,24 @@ abstract class TwitterBaseImpl implements TwitterBase, Serializable, OAuthSuppor
             long start = System.currentTimeMillis();
             try {
                 response = http.post(url, requestBody, auth);
+            } finally {
+                long elapsedTime = System.currentTimeMillis() - start;
+                TwitterAPIMonitor.getInstance().methodCalled(url, elapsedTime, isOk(response));
+            }
+            return response;
+        }
+    }
+
+    protected HttpResponse put(String url, String requestBody) throws TwitterException {
+        ensureAuthorizationEnabled();
+        if (!conf.isMBeanEnabled()) {
+            return http.putRequest(url, requestBody, auth);
+        } else {
+            // intercept HTTP call for monitoring purposes
+            HttpResponse response = null;
+            long start = System.currentTimeMillis();
+            try {
+                response = http.putRequest(url, requestBody, auth);
             } finally {
                 long elapsedTime = System.currentTimeMillis() - start;
                 TwitterAPIMonitor.getInstance().methodCalled(url, elapsedTime, isOk(response));
