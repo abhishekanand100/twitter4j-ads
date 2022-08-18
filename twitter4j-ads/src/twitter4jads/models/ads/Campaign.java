@@ -20,10 +20,6 @@ public class Campaign extends TwitterEntity implements Serializable {
     @SerializedName("created_at")
     private Date createTimeInUTC;
 
-    @Deprecated
-    @SerializedName("end_time")
-    private Date endTimeInUTC;
-
     @SerializedName("updated_at")
     private Date updateTimeInUTC;
 
@@ -54,10 +50,6 @@ public class Campaign extends TwitterEntity implements Serializable {
     @SerializedName("funding_instrument_id")
     private String fundingInstrumentId;
 
-    @Deprecated
-    @SerializedName("start_time")
-    private Date startTimeInUTC;
-
     @SerializedName("standard_delivery")
     private Boolean standardDelivery;
 
@@ -84,16 +76,6 @@ public class Campaign extends TwitterEntity implements Serializable {
 
     public void setCreateTime(Date createTimeInUTC) {
         this.createTimeInUTC = createTimeInUTC;
-    }
-
-    @Deprecated
-    public Date getEndTime() {
-        return endTimeInUTC;
-    }
-
-    @Deprecated
-    public void setEndTime(Date endTimeInUTC) {
-        this.endTimeInUTC = endTimeInUTC;
     }
 
     public Date getUpdateTime() {
@@ -166,16 +148,6 @@ public class Campaign extends TwitterEntity implements Serializable {
 
     public void setFundingInstrumentId(String fundingInstrumentId) {
         this.fundingInstrumentId = fundingInstrumentId;
-    }
-
-    @Deprecated
-    public Date getStartTime() {
-        return startTimeInUTC;
-    }
-
-    @Deprecated
-    public void setStartTime(Date startTimeInUTC) {
-        this.startTimeInUTC = startTimeInUTC;
     }
 
     public Boolean getStandardDelivery() {

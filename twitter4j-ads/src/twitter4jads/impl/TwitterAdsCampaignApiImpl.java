@@ -17,8 +17,6 @@ import twitter4jads.models.ads.sort.CampaignSortByField;
 import twitter4jads.util.TwitterAdUtil;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -100,14 +98,13 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
 
     @Override
     public BaseAdsResponse<Campaign> updateCampaign(String accountId, String campaignId, Optional<String> name,
-                                                    Long totalBudgetAmountLocalMicro, Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
-                                                    Optional<String> endTime, EntityStatus status,
-                                                    Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays,
+                                                    Long totalBudgetAmountLocalMicro, Optional<Long> dailyBudgetAmountLocalMicro,
+                                                    EntityStatus status, Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays,
                                                     Optional<BudgetOptimization> budgetOptimization) throws TwitterException {
 
         final List<HttpParameter> params =
-                validateUpdateCampaignParameters(accountId, campaignId, name, totalBudgetAmountLocalMicro, dailyBudgetAmountLocalMicro, startTime,
-                        endTime, status, standardDelivery, frequencyCap, durationInDays, budgetOptimization);
+                validateUpdateCampaignParameters(accountId, campaignId, name, totalBudgetAmountLocalMicro, dailyBudgetAmountLocalMicro,
+                        status, standardDelivery, frequencyCap, durationInDays, budgetOptimization);
         final String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + PREFIX_ACCOUNTS_URI_5 + accountId + PATH_CAMPAIGN
                 + campaignId;
         final Type type = new TypeToken<BaseAdsResponse<Campaign>>() {
@@ -137,10 +134,6 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
         TwitterAdUtil.ensureNotNull(campaign.getFundingInstrumentId(), "Funding Instrument ID");
         final String fundingInstrumentId = campaign.getFundingInstrumentId();
 
-        TwitterAdUtil.ensureNotNull(campaign.getStartTime(), "Start Time");
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        final String startTime = String.valueOf(df.format(campaign.getStartTime()));
-
         TwitterAdUtil.ensureNotNull(campaign.getDailyBudgetInMicro(), "Daily Budget Amount");
         final Long dailyBudgetAmountLocalMicro = campaign.getDailyBudgetInMicro();
 
@@ -152,13 +145,8 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
 
         params.add(new HttpParameter(PARAM_NAME, name));
         params.add(new HttpParameter(PARAM_FUNDING_INSTRUMENT_ID, fundingInstrumentId));
-        params.add(new HttpParameter(PARAM_START_TIME, startTime));
         params.add(new HttpParameter(PARAM_DAILY_BUDGET_AMOUNT_LOCAL_MICRO, dailyBudgetAmountLocalMicro));
 
-        if (campaign.getEndTime() != null) {
-            String endTime = String.valueOf(df.format(campaign.getEndTime()));
-            params.add(new HttpParameter(PARAM_END_TIME, endTime));
-        }
         if (campaign.getEntityStatus() != null) {
             params.add(new HttpParameter(PARAM_ENTITY_STATUS, campaign.getEntityStatus()));
         }
@@ -201,8 +189,8 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
     }
 
     private List<HttpParameter> validateUpdateCampaignParameters(String accountId, String campaignId, Optional<String> name, Long totalBudgetAmountLocalMicro,
-                                                                 Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
-                                                                 Optional<String> endTime, EntityStatus status,
+                                                                 Optional<Long> dailyBudgetAmountLocalMicro,
+                                                                 EntityStatus status,
                                                                  Optional<Boolean> standardDelivery, int frequencyCap,
                                                                  int durationInDays, Optional<BudgetOptimization> budgetOptimization) {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
@@ -222,12 +210,7 @@ public class TwitterAdsCampaignApiImpl implements TwitterAdsCampaignApi {
         if (dailyBudgetAmountLocalMicro != null && dailyBudgetAmountLocalMicro.isPresent()) {
             params.add(new HttpParameter(PARAM_DAILY_BUDGET_AMOUNT_LOCAL_MICRO, dailyBudgetAmountLocalMicro.get()));
         }
-        if (startTime != null && startTime.isPresent()) {
-            params.add(new HttpParameter(PARAM_START_TIME, startTime.get()));
-        }
-        if (endTime != null && endTime.isPresent()) {
-            params.add(new HttpParameter(PARAM_END_TIME, endTime.get()));
-        }
+
         if (status != null) {
             params.add(new HttpParameter(PARAM_ENTITY_STATUS, status.name()));
         }

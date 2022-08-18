@@ -59,8 +59,6 @@ public interface TwitterAdsCampaignApi {
      * @param name                        (optional) Name to update the cmapaign with.
      * @param totalBudgetAmountLocalMicro Name to update the cmapaign with.
      * @param dailyBudgetAmountLocalMicro (optional) Name to update the cmapaign with.
-     * @param startTime                   (optional) Start time to update the cmapaign with.
-     * @param endTime                     (optional) End time to update the cmapaign with.
      * @param status                      Status of the campaign
      * @param standardDelivery            (optional) Update the standard delivery setting of campaign.
      * @param frequencyCap                (if value passed greater than 0) Update integer representing the number of times for which one user could be delivered an ad to.
@@ -71,8 +69,8 @@ public interface TwitterAdsCampaignApi {
      * @see <a href="https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/campaigns/%3Acampaign_id">https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/campaigns/%3Acampaign_id</a>
      */
     BaseAdsResponse<Campaign> updateCampaign(String accountId, String campaignId, Optional<String> name,
-                                             Long totalBudgetAmountLocalMicro, Optional<Long> dailyBudgetAmountLocalMicro, Optional<String> startTime,
-                                             Optional<String> endTime, EntityStatus status,
+                                             Long totalBudgetAmountLocalMicro, Optional<Long> dailyBudgetAmountLocalMicro,
+                                             EntityStatus status,
                                              Optional<Boolean> standardDelivery, int frequencyCap, int durationInDays,
                                              Optional<BudgetOptimization> budgetOptimization) throws TwitterException;
 

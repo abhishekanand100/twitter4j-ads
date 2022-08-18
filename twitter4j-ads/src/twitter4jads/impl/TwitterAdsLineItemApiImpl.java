@@ -4,26 +4,12 @@ import com.google.common.base.Optional;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import twitter4jads.BaseAdsListResponse;
-import twitter4jads.BaseAdsListResponseIterable;
-import twitter4jads.BaseAdsResponse;
-import twitter4jads.TwitterAdsClient;
-import twitter4jads.TwitterAdsConstants;
+import twitter4jads.*;
 import twitter4jads.api.TwitterAdsLineItemApi;
 import twitter4jads.internal.http.HttpParameter;
 import twitter4jads.internal.http.HttpResponse;
 import twitter4jads.internal.models4j.TwitterException;
-import twitter4jads.models.ads.BidStrategy;
-import twitter4jads.models.ads.EntityStatus;
-import twitter4jads.models.ads.HttpVerb;
-import twitter4jads.models.ads.LineItem;
-import twitter4jads.models.ads.LineItemAppResponse;
-import twitter4jads.models.ads.Placement;
-import twitter4jads.models.ads.ProductType;
-import twitter4jads.models.ads.PromotedAccount;
-import twitter4jads.models.ads.Sentiments;
-import twitter4jads.models.ads.TwitterAdObjective;
-import twitter4jads.models.ads.TwitterOSType;
+import twitter4jads.models.ads.*;
 import twitter4jads.models.ads.sort.LineItemsSortByField;
 import twitter4jads.models.ads.sort.PromotedAccountsSortByField;
 import twitter4jads.models.media.TwitterMediaCallToAction;
@@ -33,59 +19,11 @@ import twitter4jads.util.TwitterAdUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-import static twitter4jads.TwitterAdsConstants.PARAM_ACCOUNT_ID;
-import static twitter4jads.TwitterAdsConstants.PARAM_ACCOUNT_MEDIA_ID;
-import static twitter4jads.TwitterAdsConstants.PARAM_ADVERTISER_DOMAIN;
-import static twitter4jads.TwitterAdsConstants.PARAM_APP_STORE_IDENTIFIER;
-import static twitter4jads.TwitterAdsConstants.PARAM_BID_AMOUNT_LOCAL_MICRO;
-import static twitter4jads.TwitterAdsConstants.PARAM_BID_STRATEGY;
-import static twitter4jads.TwitterAdsConstants.PARAM_BID_UNIT;
-import static twitter4jads.TwitterAdsConstants.PARAM_CALL_TO_ACTION;
-import static twitter4jads.TwitterAdsConstants.PARAM_CALL_TO_ACTION_URL;
-import static twitter4jads.TwitterAdsConstants.PARAM_CAMPAIGN_ID;
-import static twitter4jads.TwitterAdsConstants.PARAM_CAMPAIGN_IDS;
-import static twitter4jads.TwitterAdsConstants.PARAM_CATEGORIES;
-import static twitter4jads.TwitterAdsConstants.PARAM_CHARGE_BY;
-import static twitter4jads.TwitterAdsConstants.PARAM_COUNT;
-import static twitter4jads.TwitterAdsConstants.PARAM_CURSOR;
-import static twitter4jads.TwitterAdsConstants.PARAM_END_TIME;
-import static twitter4jads.TwitterAdsConstants.PARAM_ENTITY_STATUS;
-import static twitter4jads.TwitterAdsConstants.PARAM_FUNDING_INSTRUMENT_IDS;
-import static twitter4jads.TwitterAdsConstants.PARAM_GOAL;
-import static twitter4jads.TwitterAdsConstants.PARAM_ID;
-import static twitter4jads.TwitterAdsConstants.PARAM_INCLUDE_SENTIMENT;
-import static twitter4jads.TwitterAdsConstants.PARAM_LANDING_URL;
-import static twitter4jads.TwitterAdsConstants.PARAM_LINE_ITEM_APP_IDS;
-import static twitter4jads.TwitterAdsConstants.PARAM_LINE_ITEM_ID;
-import static twitter4jads.TwitterAdsConstants.PARAM_LINE_ITEM_IDS;
-import static twitter4jads.TwitterAdsConstants.PARAM_MATCH_RELEVANT_POPULAR_QUERIES;
-import static twitter4jads.TwitterAdsConstants.PARAM_NAME;
-import static twitter4jads.TwitterAdsConstants.PARAM_OBJECTIVE;
-import static twitter4jads.TwitterAdsConstants.PARAM_OS_TYPE;
-import static twitter4jads.TwitterAdsConstants.PARAM_PLACEMENTS;
-import static twitter4jads.TwitterAdsConstants.PARAM_PRIMARY_WEB_EVENT_TAG;
-import static twitter4jads.TwitterAdsConstants.PARAM_PRODUCT_TYPE;
-import static twitter4jads.TwitterAdsConstants.PARAM_PROMOTED_ACCOUNTS_IDS;
-import static twitter4jads.TwitterAdsConstants.PARAM_SORT_BY;
-import static twitter4jads.TwitterAdsConstants.PARAM_START_TIME;
-import static twitter4jads.TwitterAdsConstants.PARAM_TARGET_CPA_LOCAL_MICRO;
-import static twitter4jads.TwitterAdsConstants.PARAM_TOTAL_BUDGET_AMOUNT_LOCAL_MICRO;
-import static twitter4jads.TwitterAdsConstants.PARAM_USER_ID;
-import static twitter4jads.TwitterAdsConstants.PARAM_WITH_DELETED;
-import static twitter4jads.TwitterAdsConstants.PARAM_FREQUENCY_CAP;
-import static twitter4jads.TwitterAdsConstants.PARAM_DURATION_IN_DAYS;
-import static twitter4jads.TwitterAdsConstants.PATH_LINE_ITEMS;
-import static twitter4jads.TwitterAdsConstants.PATH_LINE_ITEM_APPS;
-import static twitter4jads.TwitterAdsConstants.PATH_MEDIA_CREATIVES;
-import static twitter4jads.TwitterAdsConstants.PATH_PROMOTED_ACCOUNTS;
-import static twitter4jads.TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5;
-import static twitter4jads.TwitterAdsConstants.PRE_ROLL_CALL_TO_ACTION;
+import static twitter4jads.TwitterAdsConstants.*;
 
 /**
  * User: abhay
@@ -109,7 +47,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
 
         Long bidAmountLocalMicro = null;
         BidStrategy bidStrategy = lineItem.getBidStrategy();
-        if(bidStrategy == null) {
+        if (bidStrategy == null) {
             bidStrategy = BidStrategy.AUTO;
         } else if (lineItem.getBidStrategy() != BidStrategy.AUTO) {
             bidAmountLocalMicro = lineItem.getBidAmtInMicro();
@@ -308,7 +246,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
     @Override
     public BaseAdsResponse<AssociateMediaCreativeResponse> associateMediaCreativeWithAccount(String accountId, String lineItemId,
                                                                                              String accountMediaId, String landingUrl)
-        throws TwitterException {
+            throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "Account Id");
         TwitterAdUtil.ensureNotNull(lineItemId, "Line Item Id");
         TwitterAdUtil.ensureNotNull(accountMediaId, "Account Media Id");
@@ -440,7 +378,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
     @Override
     public BaseAdsListResponseIterable<LineItemAppResponse> getForLineItemAppIds(String accountId, String lineItemId, List<String> lineItemAppIds,
                                                                                  Integer count, String cursor, boolean withDeleted)
-        throws TwitterException {
+            throws TwitterException {
         TwitterAdUtil.ensureNotNull(accountId, "Account Id");
         if (StringUtils.isBlank(lineItemId) && CollectionUtils.isEmpty(lineItemAppIds) && StringUtils.isBlank(cursor)) {
             throw new TwitterException("Details for fetching Apps are missing, either Line Item Id or App Ids or Cursor should be provided");
@@ -544,11 +482,14 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             }
         }
 
-        if (startTime != null && startTime.isPresent()) {
-            params.add(new HttpParameter(PARAM_START_TIME, String.valueOf(startTime)));
-        }
+        TwitterAdUtil.ensureNotNull(startTime, "Start Time");
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        final String formattedStartTime = df.format(startTime);
+        params.add(new HttpParameter(PARAM_START_TIME, formattedStartTime));
+
         if (endTime != null && endTime.isPresent()) {
-            params.add(new HttpParameter(PARAM_END_TIME, String.valueOf(endTime)));
+            String formattedEndTime = df.format(endTime);
+            params.add(new HttpParameter(PARAM_END_TIME, formattedEndTime));
         }
         if (TwitterAdUtil.isNotNull(budget)) {
             params.add(new HttpParameter(PARAM_TOTAL_BUDGET_AMOUNT_LOCAL_MICRO, budget));
@@ -563,7 +504,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
         if (TwitterAdUtil.isNotNull(frequencyCap) && frequencyCap.isPresent()) {
             params.add(new HttpParameter(PARAM_FREQUENCY_CAP, frequencyCap.get()));
         }
-        if (TwitterAdUtil.isNotNull(durationInDays)&& durationInDays.isPresent()) {
+        if (TwitterAdUtil.isNotNull(durationInDays) && durationInDays.isPresent()) {
             params.add(new HttpParameter(PARAM_DURATION_IN_DAYS, durationInDays.get()));
         }
         return params;
@@ -601,10 +542,10 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             params.add(new HttpParameter(PARAM_TARGET_CPA_LOCAL_MICRO, targetCPA));
         }
         if (startTime != null && !startTime.isEmpty()) {
-            params.add(new HttpParameter(PARAM_START_TIME, String.valueOf(startTime)));
+            params.add(new HttpParameter(PARAM_START_TIME, startTime));
         }
         if (endTime != null && !endTime.isEmpty()) {
-            params.add(new HttpParameter(PARAM_END_TIME, String.valueOf(endTime)));
+            params.add(new HttpParameter(PARAM_END_TIME, endTime));
         }
 
         if (TwitterAdUtil.isNotNullOrEmpty(goal)) {
