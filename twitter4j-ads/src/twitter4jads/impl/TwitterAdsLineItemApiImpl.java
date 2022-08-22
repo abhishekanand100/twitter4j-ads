@@ -422,28 +422,14 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
 
     // -------------------------------------------------------------------- PRIVATE METHODS ---------------------------------------------------------
 
-    private List<HttpParameter> validateCreateLineItemParameters(String campaignId,
-                                                                 BidStrategy bidStrategy,
-                                                                 Optional<Long> bidAmountLocalMicro,
-                                                                 ProductType productType,
-                                                                 List<Placement> placements,
-                                                                 EntityStatus status,
-                                                                 String objective,
-                                                                 Optional<String> payBy,
-                                                                 Optional<String> advertiserDomain,
-                                                                 String[] categories,
-                                                                 Optional<String> webEventTag,
-                                                                 Optional<String> name,
-                                                                 Optional<Date> startTime,
-                                                                 Optional<Date> endTime,
-                                                                 Long targetCpaLocalMicro,
-                                                                 Optional<Long> totalBudget,
-                                                                 Optional<Long> dailyBudget,
-                                                                 Optional<String> goal,
-                                                                 Optional<Integer> frequencyCap,
-                                                                 Optional<Integer> durationInDays,
-                                                                 Optional<AudienceExpansion> expansion,
-                                                                 Optional<Boolean> standardDelivery) {
+    private List<HttpParameter> validateCreateLineItemParameters(String campaignId, BidStrategy bidStrategy, Optional<Long> bidAmountLocalMicro,
+                                                                 ProductType productType, List<Placement> placements, EntityStatus status,
+                                                                 String objective, Optional<String> payBy, Optional<String> advertiserDomain,
+                                                                 String[] categories, Optional<String> webEventTag, Optional<String> name,
+                                                                 Optional<Date> startTime, Optional<Date> endTime, Long targetCpaLocalMicro,
+                                                                 Optional<Long> totalBudget, Optional<Long> dailyBudget, Optional<String> goal,
+                                                                 Optional<Integer> frequencyCap, Optional<Integer> durationInDays,
+                                                                 Optional<AudienceExpansion> expansion, Optional<Boolean> standardDelivery) {
         TwitterAdUtil.ensureNotNull(campaignId, "CampaignId");
         TwitterAdUtil.ensureNotNull(startTime, "Start time");
         TwitterAdUtil.ensureNotNull(endTime, "End time");

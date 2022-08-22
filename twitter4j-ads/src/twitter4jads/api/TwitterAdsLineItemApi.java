@@ -83,6 +83,7 @@ public interface TwitterAdsLineItemApi {
      * @param dailyBudget            (optional) Update the daily budget of line item.
      * @param frequencyCap           (optional) Update the frequency cap of line item.
      * @param durationInDays         (optional) Update the durationInDays of line item.
+     * @param standardDelivery       (optional) Update the standardDelivery of line item.
      * @return updated line item
      * @throws TwitterException
      * @see <a href="https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/line_items/%3Aline_item_id">https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/line_items/%3Aline_item_id</a>
