@@ -58,16 +58,15 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
         TwitterAdUtil.ensureNotNull(accountId, "accountId");
 
         final List<HttpParameter> params =
-                validateCreateLineItemParameters(Optional.fromNullable(campaignId), bidStrategy, Optional.fromNullable(bidAmountLocalMicro),
-                        Optional.fromNullable(lineItem.getProductType()),
-                        lineItem.getPlacements(), lineItem.getStatus(), Optional.fromNullable(includeSentiment),
-                        Optional.fromNullable(matchRelevantPopularQueries), Optional.fromNullable(lineItem.getObjective()),
-                        Optional.fromNullable(lineItem.getPayBy()),
-                        Optional.fromNullable(lineItem.getAdvertiserDomain()),
-                        lineItem.getCategories(), lineItem.getWebEventTag(), lineItem.getName(),
+                validateCreateLineItemParameters(campaignId, bidStrategy, Optional.fromNullable(bidAmountLocalMicro),
+                        lineItem.getProductType(), lineItem.getPlacements(), lineItem.getStatus(), lineItem.getObjective(),
+                        Optional.fromNullable(lineItem.getPayBy()), Optional.fromNullable(lineItem.getAdvertiserDomain()),
+                        lineItem.getCategories(), Optional.fromNullable(lineItem.getWebEventTag()), Optional.fromNullable(lineItem.getName()),
                         Optional.fromNullable(lineItem.getStartTime()), Optional.fromNullable(lineItem.getEndTime()),
-                        lineItem.getTargetCpaLocalMicro(), lineItem.getBudget(), lineItem.getGoal(),
-                        Optional.fromNullable(lineItem.getFrequencyCap()), Optional.fromNullable(lineItem.getDurationInDays()));
+                        lineItem.getTargetCpaLocalMicro(), Optional.fromNullable(lineItem.getTotalBudget()),
+                        Optional.fromNullable(lineItem.getDailyBudget()), Optional.fromNullable(lineItem.getGoal()),
+                        Optional.fromNullable(lineItem.getFrequencyCap()), Optional.fromNullable(lineItem.getDurationInDays()),
+                        Optional.fromNullable(lineItem.getAudienceExpansion()), Optional.fromNullable(lineItem.getStandardDelivery()));
         HttpParameter[] parameters = null;
         if (!params.isEmpty()) {
             parameters = params.toArray(new HttpParameter[params.size()]);
@@ -86,20 +85,23 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
     }
 
     @Override
-    public BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidStrategy bidStrategy,
-                                                    Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
-                                                    Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy,
-                                                    Optional<String> bidUnit, Optional<String> advertiserDomain, String goal,
-                                                    String[] iabCategories, String startTime, String endTime, String name,
-                                                    Long targetCPA, Long budget) throws TwitterException {
-        if (bidStrategy == null) {
+    public BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, Optional<BidStrategy> bidStrategy,
+                                                    Optional<Long> bidAmountLocalMicro, Optional<EntityStatus> status,
+                                                    Optional<String> payBy, Optional<AudienceExpansion> expansion,
+                                                    Optional<String> advertiserDomain, Optional<String> goal,
+                                                    String[] iabCategories, Optional<String> startTime, Optional<String> endTime,
+                                                    Optional<String> name, Optional<Long> targetCPA, Optional<Long> totalBudget,
+                                                    Optional<Long> dailyBudget, Optional<Integer> frequencyCap,
+                                                    Optional<Integer> durationInDays, Optional<Boolean> standardDelivery) throws TwitterException {
+        if (!bidStrategy.isPresent()) {
             bidAmountLocalMicro = null;
-            bidStrategy = BidStrategy.AUTO;
+            bidStrategy = Optional.of(BidStrategy.AUTO);
         }
 
         final List<HttpParameter> params =
                 validateUpdateLineItemParameters(accountId, lineItemId, bidStrategy, bidAmountLocalMicro, status,
-                        includeSentiment, matchRelevantPopularQueries, chargeBy, bidUnit, goal, advertiserDomain, iabCategories, budget, name, startTime, endTime, targetCPA);
+                        payBy, expansion, advertiserDomain, goal, iabCategories, startTime, endTime, name, targetCPA,
+                        totalBudget, dailyBudget, frequencyCap, durationInDays, standardDelivery);
         String baseUrl = twitterAdsClient.getBaseAdsAPIUrl() + TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5 + accountId
                 + PATH_LINE_ITEMS +
                 lineItemId;
@@ -420,87 +422,103 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
 
     // -------------------------------------------------------------------- PRIVATE METHODS ---------------------------------------------------------
 
-    private List<HttpParameter> validateCreateLineItemParameters(Optional<String> campaignId, BidStrategy bidStrategy, Optional<Long> bidAmountLocalMicro,
-                                                                 Optional<ProductType> productType, List<Placement> placements,
-                                                                 EntityStatus status, Optional<Sentiments> includeSentiment, Optional<Boolean> matchRelevantPopularQueries,
-                                                                 Optional<String> objective, Optional<String> chargeBy,
-                                                                 Optional<String> advertiserDomain, String[] categories, String webEventTag, String name,
-                                                                 Optional<Date> startTime, Optional<Date> endTime,
-                                                                 Long targetCpaLocalMicro, Long budget, String goal, Optional<Integer> frequencyCap, Optional<Integer> durationInDays) {
+    private List<HttpParameter> validateCreateLineItemParameters(String campaignId,
+                                                                 BidStrategy bidStrategy,
+                                                                 Optional<Long> bidAmountLocalMicro,
+                                                                 ProductType productType,
+                                                                 List<Placement> placements,
+                                                                 EntityStatus status,
+                                                                 String objective,
+                                                                 Optional<String> payBy,
+                                                                 Optional<String> advertiserDomain,
+                                                                 String[] categories,
+                                                                 Optional<String> webEventTag,
+                                                                 Optional<String> name,
+                                                                 Optional<Date> startTime,
+                                                                 Optional<Date> endTime,
+                                                                 Long targetCpaLocalMicro,
+                                                                 Optional<Long> totalBudget,
+                                                                 Optional<Long> dailyBudget,
+                                                                 Optional<String> goal,
+                                                                 Optional<Integer> frequencyCap,
+                                                                 Optional<Integer> durationInDays,
+                                                                 Optional<AudienceExpansion> expansion,
+                                                                 Optional<Boolean> standardDelivery) {
+        TwitterAdUtil.ensureNotNull(campaignId, "CampaignId");
+        TwitterAdUtil.ensureNotNull(startTime, "Start time");
+        TwitterAdUtil.ensureNotNull(endTime, "End time");
+        TwitterAdUtil.ensureNotNull(objective, "Objective");
+        TwitterAdUtil.ensureNotEmpty(placements, "Placements");
+        TwitterAdUtil.ensureNotNull(productType, "Product type");
+
         if (bidStrategy == BidStrategy.TARGET || bidStrategy == BidStrategy.MAX) {
-            TwitterAdUtil.ensureNotNull(bidAmountLocalMicro, "Bid amount cannot be null for TARGET or MAX Bid Type");
+            if (!bidAmountLocalMicro.isPresent()) {
+                throw new IllegalArgumentException("Bid amount cannot be empty for TARGET or MAX Bid Type");
+            }
         }
 
         final List<HttpParameter> params = new ArrayList<>();
-        if (campaignId != null && campaignId.isPresent()) {
-            params.add(new HttpParameter(PARAM_CAMPAIGN_ID, campaignId.get()));
+        params.add(new HttpParameter(PARAM_CAMPAIGN_ID, campaignId));
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        if (TwitterAdUtil.isNotNull(startTime) && startTime.isPresent()) {
+            final String formattedStartTime = df.format(startTime.get());
+            params.add(new HttpParameter(PARAM_START_TIME, formattedStartTime));
         }
 
+        if (TwitterAdUtil.isNotNull(endTime) && endTime.isPresent()) {
+            String formattedEndTime = df.format(endTime.get());
+            params.add(new HttpParameter(PARAM_END_TIME, formattedEndTime));
+        }
+
+        params.add(new HttpParameter(PARAM_OBJECTIVE, objective));
+
+        // Twitter Audience Platform is supported for these objectives only
+        if (TwitterAdUtil.ENGAGEMENTS.equals(objective) || TwitterAdUtil.VIDEO_VIEWS.equals(objective) ||
+                TwitterAdUtil.WEBSITE_CLICKS.equals(objective)) {
+            if (advertiserDomain != null && advertiserDomain.isPresent()) {
+                params.add(new HttpParameter(PARAM_ADVERTISER_DOMAIN, advertiserDomain.get()));
+            }
+            if (categories != null && TwitterAdUtil.isNotEmpty(Arrays.asList(categories))) {
+                params.add(new HttpParameter(PARAM_CATEGORIES, TwitterAdUtil.getCsv(Arrays.asList(categories))));
+            }
+        }
+
+        if (TwitterAdUtil.TARGET_CPA_SUPPORTED_OBJECTIVES.contains(TwitterAdObjective.valueOf(objective))) {
+            if (TwitterAdUtil.isNotNull(targetCpaLocalMicro)) {
+                params.add(new HttpParameter(PARAM_TARGET_CPA_LOCAL_MICRO, targetCpaLocalMicro));
+            }
+        }
+
+        params.add(new HttpParameter(PARAM_PLACEMENTS, TwitterAdUtil.getCsv(placements)));
+        params.add(new HttpParameter(PARAM_PRODUCT_TYPE, productType.name()));
         params.add(new HttpParameter(PARAM_BID_STRATEGY, bidStrategy.name()));
 
         if (TwitterAdUtil.isNotNull(bidAmountLocalMicro) && bidAmountLocalMicro.isPresent()) {
             params.add(new HttpParameter(PARAM_BID_AMOUNT_LOCAL_MICRO, bidAmountLocalMicro.get()));
         }
 
-        if (chargeBy != null && chargeBy.isPresent()) {
-            params.add(new HttpParameter(PARAM_CHARGE_BY, chargeBy.get()));
+        if (TwitterAdUtil.isNotNull(payBy) && payBy.isPresent()) {
+            params.add(new HttpParameter(PARAM_PAY_BY, payBy.get()));
         }
-        if (StringUtils.isNotEmpty(webEventTag)) {
-            params.add(new HttpParameter(PARAM_PRIMARY_WEB_EVENT_TAG, webEventTag));
+        if (TwitterAdUtil.isNotNull(webEventTag) && webEventTag.isPresent()) {
+            params.add(new HttpParameter(PARAM_PRIMARY_WEB_EVENT_TAG, webEventTag.get()));
         }
-
+        if (TwitterAdUtil.isNotNull(name) && name.isPresent()) {
+            params.add(new HttpParameter(PARAM_NAME, name.get()));
+        }
         if (status != null) {
             params.add(new HttpParameter(PARAM_ENTITY_STATUS, status.name()));
         }
-        if (includeSentiment != null && includeSentiment.isPresent()) {
-            params.add(new HttpParameter(PARAM_INCLUDE_SENTIMENT, includeSentiment.get().name()));
-        }
-        if (matchRelevantPopularQueries != null && matchRelevantPopularQueries.isPresent()) {
-            params.add(new HttpParameter(PARAM_MATCH_RELEVANT_POPULAR_QUERIES, matchRelevantPopularQueries.get()));
-        }
-        if (objective != null && objective.isPresent()) {
-            params.add(new HttpParameter(PARAM_OBJECTIVE, objective.get()));
 
-            // Twitter Audience Platform is supported for these objectives only
-            if (TwitterAdUtil.ENGAGEMENTS.equals(objective.get()) || TwitterAdUtil.VIDEO_VIEWS.equals(objective.get()) ||
-                    TwitterAdUtil.WEBSITE_CLICKS.equals(objective.get())) {
-                if (advertiserDomain != null && advertiserDomain.isPresent()) {
-                    params.add(new HttpParameter(PARAM_ADVERTISER_DOMAIN, advertiserDomain.get()));
-                }
-                if (categories != null && TwitterAdUtil.isNotEmpty(Arrays.asList(categories))) {
-                    params.add(new HttpParameter(PARAM_CATEGORIES, TwitterAdUtil.getCsv(Arrays.asList(categories))));
-                }
-            }
-        }
-        if (TwitterAdUtil.isNotNullOrEmpty(goal)) {
-            params.add(new HttpParameter(PARAM_GOAL, goal));
-        }
-        if (objective != null && objective.isPresent() &&
-                TwitterAdUtil.TARGET_CPA_SUPPORTED_OBJECTIVES.contains(TwitterAdObjective.valueOf(objective.get()))) {
-            if (TwitterAdUtil.isNotNull(targetCpaLocalMicro)) {
-                params.add(new HttpParameter(PARAM_TARGET_CPA_LOCAL_MICRO, targetCpaLocalMicro));
-            }
+        if (TwitterAdUtil.isNotNull(goal) && goal.isPresent()) {
+            params.add(new HttpParameter(PARAM_GOAL, goal.get()));
         }
 
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        if (startTime != null && startTime.isPresent()) {
-            final String formattedStartTime = df.format(startTime.get());
-            params.add(new HttpParameter(PARAM_START_TIME, formattedStartTime));
+        if (TwitterAdUtil.isNotNull(totalBudget) && totalBudget.isPresent()) {
+            params.add(new HttpParameter(PARAM_TOTAL_BUDGET_AMOUNT_LOCAL_MICRO, totalBudget.get()));
         }
-
-        if (endTime != null && endTime.isPresent()) {
-            String formattedEndTime = df.format(endTime.get());
-            params.add(new HttpParameter(PARAM_END_TIME, formattedEndTime));
-        }
-        if (TwitterAdUtil.isNotNull(budget)) {
-            params.add(new HttpParameter(PARAM_TOTAL_BUDGET_AMOUNT_LOCAL_MICRO, budget));
-        }
-
-        if (productType != null && productType.isPresent()) {
-            params.add(new HttpParameter(PARAM_PRODUCT_TYPE, productType.get().name()));
-        }
-        if (TwitterAdUtil.isNotEmpty(placements)) {
-            params.add(new HttpParameter(PARAM_PLACEMENTS, TwitterAdUtil.getCsv(placements)));
+        if (TwitterAdUtil.isNotNull(dailyBudget) && dailyBudget.isPresent()) {
+            params.add(new HttpParameter(PARAM_DAILY_BUDGET_AMOUNT_LOCAL_MICRO, dailyBudget.get()));
         }
         if (TwitterAdUtil.isNotNull(frequencyCap) && frequencyCap.isPresent()) {
             params.add(new HttpParameter(PARAM_FREQUENCY_CAP, frequencyCap.get()));
@@ -508,67 +526,75 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
         if (TwitterAdUtil.isNotNull(durationInDays) && durationInDays.isPresent()) {
             params.add(new HttpParameter(PARAM_DURATION_IN_DAYS, durationInDays.get()));
         }
+        if (TwitterAdUtil.isNotNull(expansion) && expansion.isPresent()) {
+            params.add(new HttpParameter(PARAM_AUDIENCE_EXPANSION, expansion.get().name()));
+        }
+        if (TwitterAdUtil.isNotNull(standardDelivery) && standardDelivery.isPresent()) {
+            params.add(new HttpParameter(PARAM_STANDARD_DELIVERY, standardDelivery.toString()));
+        }
         return params;
     }
 
-    private List<HttpParameter> validateUpdateLineItemParameters(String accountId, String lineItemId, BidStrategy bidStrategy,
-                                                                 Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
-                                                                 Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy, Optional<String> bidUnit, String goal,
-                                                                 Optional<String> advertiserDomain, String[] iabCategories, Long budget, String name,
-                                                                 String startTime, String endTime, Long targetCPA) {
+    private List<HttpParameter> validateUpdateLineItemParameters(String accountId, String lineItemId, Optional<BidStrategy> bidStrategy,
+                                                                 Optional<Long> bidAmountLocalMicro, Optional<EntityStatus> status,
+                                                                 Optional<String> payBy, Optional<AudienceExpansion> expansion,
+                                                                 Optional<String> advertiserDomain, Optional<String> goal,
+                                                                 String[] iabCategories, Optional<String> startTime, Optional<String> endTime,
+                                                                 Optional<String> name, Optional<Long> targetCPA, Optional<Long> totalBudget,
+                                                                 Optional<Long> dailyBudget, Optional<Integer> frequencyCap,
+                                                                 Optional<Integer> durationInDays, Optional<Boolean> standardDelivery) {
         TwitterAdUtil.ensureNotNull(accountId, "AccountId");
         TwitterAdUtil.ensureNotNull(lineItemId, "Line Item Id");
-        TwitterAdUtil.ensureNotNull(bidStrategy, "Bid Strategy");
-
-        if (bidStrategy == BidStrategy.TARGET || bidStrategy == BidStrategy.MAX) {
-            TwitterAdUtil.ensureNotNull(bidAmountLocalMicro, "Bid amount cannot be null for TARGET or MAX Bid Type");
-        }
 
         final List<HttpParameter> params = new ArrayList<>();
+        if (TwitterAdUtil.isNotNull(bidStrategy) && bidStrategy.isPresent()) {
+            params.add(new HttpParameter(PARAM_BID_STRATEGY, bidStrategy.get().name()));
+        }
         if (TwitterAdUtil.isNotNull(bidAmountLocalMicro) && bidAmountLocalMicro.isPresent()) {
             params.add(new HttpParameter(PARAM_BID_AMOUNT_LOCAL_MICRO, bidAmountLocalMicro.get()));
         }
-        params.add(new HttpParameter(PARAM_BID_STRATEGY, bidStrategy.name()));
-
-        if (chargeBy != null && chargeBy.isPresent()) {
-            params.add(new HttpParameter(PARAM_CHARGE_BY, chargeBy.get()));
+        if (TwitterAdUtil.isNotNull(status) && status.isPresent()) {
+            params.add(new HttpParameter(PARAM_ENTITY_STATUS, status.get().name()));
         }
-        if (bidUnit != null && bidUnit.isPresent()) {
-            params.add(new HttpParameter(PARAM_BID_UNIT, bidUnit.get()));
+        if (payBy != null && payBy.isPresent()) {
+            params.add(new HttpParameter(PARAM_PAY_BY, payBy.get()));
         }
-        if (TwitterAdUtil.isNotNullOrEmpty(name)) {
-            params.add(new HttpParameter(PARAM_NAME, name));
+        if (expansion != null && expansion.isPresent()) {
+            params.add(new HttpParameter(PARAM_AUDIENCE_EXPANSION, expansion.get().name()));
         }
-        if (TwitterAdUtil.isNotNull(targetCPA)) {
-            params.add(new HttpParameter(PARAM_TARGET_CPA_LOCAL_MICRO, targetCPA));
+        if (goal != null && goal.isPresent()) {
+            params.add(new HttpParameter(PARAM_GOAL, goal.get()));
         }
-        if (startTime != null && !startTime.isEmpty()) {
-            params.add(new HttpParameter(PARAM_START_TIME, startTime));
+        if (startTime != null && startTime.isPresent()) {
+            params.add(new HttpParameter(PARAM_START_TIME, startTime.get()));
         }
-        if (endTime != null && !endTime.isEmpty()) {
-            params.add(new HttpParameter(PARAM_END_TIME, endTime));
+        if (endTime != null && endTime.isPresent()) {
+            params.add(new HttpParameter(PARAM_END_TIME, endTime.get()));
         }
-
-        if (TwitterAdUtil.isNotNullOrEmpty(goal)) {
-            params.add(new HttpParameter(PARAM_GOAL, goal));
+        if (name != null && name.isPresent()) {
+            params.add(new HttpParameter(PARAM_NAME, name.get()));
         }
-
-        if (bidStrategy == BidStrategy.AUTO) {
+        if (targetCPA != null && targetCPA.isPresent()) {
+            params.add(new HttpParameter(PARAM_TARGET_CPA_LOCAL_MICRO, targetCPA.get()));
+        }
+        if (totalBudget != null && totalBudget.isPresent()) {
+            params.add(new HttpParameter(PARAM_TOTAL_BUDGET_AMOUNT_LOCAL_MICRO, totalBudget.get()));
+        }
+        if (dailyBudget != null && dailyBudget.isPresent()) {
+            params.add(new HttpParameter(PARAM_DAILY_BUDGET_AMOUNT_LOCAL_MICRO, dailyBudget.get()));
+        }
+        if (frequencyCap != null && frequencyCap.isPresent()) {
+            params.add(new HttpParameter(PARAM_FREQUENCY_CAP, frequencyCap.get()));
+        }
+        if (durationInDays != null && durationInDays.isPresent()) {
+            params.add(new HttpParameter(PARAM_DURATION_IN_DAYS, durationInDays.get()));
+        }
+        if (bidStrategy.equals(BidStrategy.AUTO)) {
             params.add(new HttpParameter(PARAM_BID_AMOUNT_LOCAL_MICRO, "null"));
         }
-
-        if (status != null) {
-            params.add(new HttpParameter(PARAM_ENTITY_STATUS, status.name()));
+        if (TwitterAdUtil.isNotNull(standardDelivery) && standardDelivery.isPresent()) {
+            params.add(new HttpParameter(PARAM_STANDARD_DELIVERY, standardDelivery.toString()));
         }
-        if (includeSentiment != null && includeSentiment.isPresent()) {
-            params.add(new HttpParameter(PARAM_INCLUDE_SENTIMENT, includeSentiment.get().name()));
-        }
-        if (matchRelevantPopularQueries != null && matchRelevantPopularQueries.isPresent()) {
-            params.add(new HttpParameter(PARAM_MATCH_RELEVANT_POPULAR_QUERIES, matchRelevantPopularQueries.get()));
-        }
-
-        String budgetStr = budget == null ? "null" : String.valueOf(budget);
-        params.add(new HttpParameter(PARAM_TOTAL_BUDGET_AMOUNT_LOCAL_MICRO, budgetStr));
 
         // Twitter Audience Platform is supported for these objectives only
 

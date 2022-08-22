@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import twitter4jads.BaseAdsListResponseIterable;
 import twitter4jads.BaseAdsResponse;
 import twitter4jads.internal.models4j.TwitterException;
+import twitter4jads.models.ads.AudienceExpansion;
 import twitter4jads.models.ads.BidStrategy;
 import twitter4jads.models.ads.EntityStatus;
 import twitter4jads.models.ads.LineItem;
@@ -66,24 +67,34 @@ public interface TwitterAdsLineItemApi {
     /**
      * @param accountId              The identifier for the leveraged account.
      * @param lineItemId             The line item identifier of the line item to update.
-     * @param bidStrategy            The BidStrategy to use on this line item.
+     * @param bidStrategy            (optional) The BidStrategy to use on this line item.
      * @param bidAmountLocalMicro    (optional) Specify a new bid to set on this line item.
-     * @param status                 Status to set
-     * @param includeSentiment       (optional) Update the include sentiment parameter of line item.
-     * @param chargeBy               (optional) Update the charge by parameter of line item.
-     * @param bidUnit                (optional) Update the bid unit parameter of line item.
+     * @param status                 (optional) Status to set
+     * @param payBy                  (optional) Update the pay by parameter of line item.
+     * @param expansion              (optional) Update the expansion parameter of line item.
      * @param advertiserDomain       (optional) Update the advertiser domain of line item (for TAP campaigns).
+     * @param goal                   (optional) Update the goal of line item.
      * @param iabCategories          (optional) Update the IAB categories associated with the line item (for TAP campaigns).
+     * @param startTime              (optional) Update the start time of line item.
+     * @param endTime                (optional) Update the end time of line item.
+     * @param name                   (optional) Update the name of line item.
+     * @param targetCPA              (optional) Update the targetCPA of line item.
+     * @param totalBudget            (optional) Update the total budget of line item.
+     * @param dailyBudget            (optional) Update the daily budget of line item.
+     * @param frequencyCap           (optional) Update the frequency cap of line item.
+     * @param durationInDays         (optional) Update the durationInDays of line item.
      * @return updated line item
      * @throws TwitterException
      * @see <a href="https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/line_items/%3Aline_item_id">https://dev.twitter.com/ads/reference/put/accounts/%3Aaccount_id/line_items/%3Aline_item_id</a>
      */
-    BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, BidStrategy bidStrategy,
-                                             Optional<Long> bidAmountLocalMicro, EntityStatus status, Optional<Sentiments> includeSentiment,
-                                             Optional<Boolean> matchRelevantPopularQueries, Optional<String> chargeBy,
-                                             Optional<String> bidUnit, Optional<String> advertiserDomain, String optimization,
-                                             String[] iabCategories, String startTime, String endTime, String name,
-                                             Long targetCPA, Long budget) throws TwitterException;
+    BaseAdsResponse<LineItem> updateLineItem(String accountId, String lineItemId, Optional<BidStrategy> bidStrategy,
+                                             Optional<Long> bidAmountLocalMicro, Optional<EntityStatus> status,
+                                             Optional<String> payBy, Optional<AudienceExpansion> expansion,
+                                             Optional<String> advertiserDomain, Optional<String> goal,
+                                             String[] iabCategories, Optional<String> startTime, Optional<String> endTime,
+                                             Optional<String> name, Optional<Long> targetCPA, Optional<Long> totalBudget,
+                                             Optional<Long> dailyBudget, Optional<Integer> frequencyCap,
+                                             Optional<Integer> durationInDays, Optional<Boolean> standardDelivery) throws TwitterException;
 
     /**
      * @param accountId  The identifier for the leveraged account.
