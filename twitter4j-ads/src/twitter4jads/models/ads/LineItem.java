@@ -95,7 +95,10 @@ public class LineItem extends TwitterEntity {
     private Date endTimeInUTC;
 
     @SerializedName("total_budget_amount_local_micro")
-    private Long budget;
+    private Long totalBudget;
+
+    @SerializedName("daily_budget_amount_local_micro")
+    private Long dailyBudget;
 
     @SerializedName("entity_status")
     private EntityStatus status;
@@ -105,6 +108,12 @@ public class LineItem extends TwitterEntity {
 
     @SerializedName("duration_in_days")
     private Integer durationInDays;
+
+    @SerializedName("audience_expansion")
+    private AudienceExpansion audienceExpansion;
+
+    @SerializedName("standard_delivery")
+    private Boolean standardDelivery;
 
     public String getCreativeSource() {
         return creativeSource;
@@ -322,12 +331,20 @@ public class LineItem extends TwitterEntity {
         this.targetCpaLocalMicro = targetCpaLocalMicro;
     }
 
-    public Long getBudget() {
-        return budget;
+    public Long getTotalBudget() {
+        return totalBudget;
     }
 
-    public void setBudget(Long budget) {
-        this.budget = budget;
+    public Long getDailyBudget() {
+        return dailyBudget;
+    }
+
+    public void setTotalBudget(Long budget) {
+        this.totalBudget = budget;
+    }
+
+    public void setDailyBudget(Long budget) {
+        this.dailyBudget = budget;
     }
 
     public EntityStatus getStatus() {
@@ -352,6 +369,22 @@ public class LineItem extends TwitterEntity {
 
     public void setDurationInDays(Integer durationInDays) {
         this.durationInDays = durationInDays;
+    }
+
+    public AudienceExpansion getAudienceExpansion() {
+        return audienceExpansion;
+    }
+
+    public void setAudienceExpansion(AudienceExpansion audienceExpansion) {
+        this.audienceExpansion = audienceExpansion;
+    }
+
+    public Boolean getStandardDelivery() {
+        return standardDelivery;
+    }
+
+    public void setStandardDelivery(Boolean standardDelivery) {
+        this.standardDelivery = standardDelivery;
     }
 
     @Override
@@ -385,7 +418,12 @@ public class LineItem extends TwitterEntity {
                ", endTime=" + endTimeInUTC +
                ", goal='" + goal + '\'' +
                ", creativeSource='" + creativeSource + '\'' +
-               ", budget='" + budget + '\'' +
+               ", totalBudget='" + totalBudget + '\'' +
+               ", dailyBudget='" + dailyBudget + '\'' +
+               ", frequencyCap='" + frequencyCap + '\'' +
+               ", durationInDays='" + durationInDays + '\'' +
+               ", audienceExpansion='" + audienceExpansion + '\'' +
+               ", standardDelivery='" + standardDelivery + '\'' +
                '}';
     }
 }

@@ -80,21 +80,19 @@ public interface TwitterAdsConstants {
     String PARAM_BID_AMOUNT_LOCAL_MICRO = "bid_amount_local_micro";
     String PARAM_TARGET_CPA_LOCAL_MICRO = "target_cpa_local_micro";
     String PARAM_BID_STRATEGY = "bid_strategy";
-    String PARAM_BID_UNIT = "bid_unit";
     String PARAM_BUDGET_OPTIMIZATION = "budget_optimization";
 
     String PARAM_GOAL = "goal";
-    String PARAM_CHARGE_BY = "charge_by";
+    String PARAM_PAY_BY = "pay_by";
+    String PARAM_AUDIENCE_EXPANSION = "audience_expansion";
     String PARAM_PRODUCT_TYPE = "product_type";
     String PARAM_PLACEMENTS = "placements";
-    String PARAM_MATCH_RELEVANT_POPULAR_QUERIES = "match_relevant_popular_queries";
     String PARAM_OBJECTIVE = "objective";
     String CURRENCY = "currency";
     String CAMPAIGN_DAILY_BUDGET_AMOUNT_LOCAL_MICRO = "campaign_daily_budget_amount_local_micro";
     String BID_AMOUNT_LOCAL_MICRO = "bid_amount_local_micro";
 
     String USERS = "users";
-    String PARAM_INCLUDE_SENTIMENT = "include_sentiment";
     String PARAM_SUGGESTION_TYPE = "suggestion_type";
     String PARAM_IGNORED_VALUES = "ignored_values";
     String PARAM_TARGETING_VALUES = "targeting_values";
