@@ -516,7 +516,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             params.add(new HttpParameter(PARAM_AUDIENCE_EXPANSION, expansion.get().name()));
         }
         if (TwitterAdUtil.isNotNull(standardDelivery) && standardDelivery.isPresent()) {
-            params.add(new HttpParameter(PARAM_STANDARD_DELIVERY, standardDelivery.toString()));
+            params.add(new HttpParameter(PARAM_STANDARD_DELIVERY, standardDelivery.get()));
         }
         return params;
     }
@@ -579,7 +579,7 @@ public class TwitterAdsLineItemApiImpl implements TwitterAdsLineItemApi {
             params.add(new HttpParameter(PARAM_BID_AMOUNT_LOCAL_MICRO, "null"));
         }
         if (TwitterAdUtil.isNotNull(standardDelivery) && standardDelivery.isPresent()) {
-            params.add(new HttpParameter(PARAM_STANDARD_DELIVERY, standardDelivery.toString()));
+            params.add(new HttpParameter(PARAM_STANDARD_DELIVERY, standardDelivery.get()));
         }
 
         // Twitter Audience Platform is supported for these objectives only
