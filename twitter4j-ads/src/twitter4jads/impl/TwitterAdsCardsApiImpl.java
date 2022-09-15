@@ -89,7 +89,7 @@ public class TwitterAdsCardsApiImpl implements TwitterAdsCardsApi {
 
         String url = twitterAdsClient.getBaseAdsAPIUrl() + TwitterAdsConstants.PREFIX_ACCOUNTS_URI_5 + accountId
                 + PATH_CARDS;
-        Type type = new TypeToken<BaseAdsListResponse<TwitterImageAppDownloadCard>>() {
+        Type type = new TypeToken<BaseAdsListResponse<Card>>() {
         }.getType();
         return twitterAdsClient.executeHttpListRequest(url, params, type);
     }
